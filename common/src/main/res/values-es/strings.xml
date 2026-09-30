@@ -271,7 +271,7 @@
     <string name="preparing_mfi_authentication">Preparando autenticación MFi</string>
     <string name="ready">Listo</string>
     <string name="ready_when_you_are">Listo cuando tú lo estés</string>
-    <string name="receiver_based_on_xcertplay_licensed_under_gpl_3_0_peugeotplay">Receptor basado en xcertplay, con licencia GPL-3.0. La interfaz de PeugeotPlay sigue el diseño de DiAuto, con licencia AGPL-3.0.\n\nIncluye AndroidX, Bouncy Castle, JmDNS y SLF4J. El código fuente y los avisos de licencia acompañan a esta versión.\n\nCarPlay y el icono de CarPlay pertenecen a Apple Inc. PeugeotPlay es un proyecto independiente.</string>
+    <string name="receiver_based_on_xcertplay_licensed_under_gpl_3_0_peugeotplay">Receptor basado en xcertplay, con licencia GPL-3.0. PeugeotPlay es una obra derivada basada en DiPlay v0.2.7. La interfaz de PeugeotPlay sigue el diseño de DiAuto, con licencia AGPL-3.0.\n\nIncluye AndroidX, Bouncy Castle, JmDNS y SLF4J. El código fuente y los avisos de licencia acompañan a esta versión.\n\nCarPlay y el icono de CarPlay pertenecen a Apple Inc. PeugeotPlay es un proyecto independiente.</string>
     <string name="reconnecting_to_your_iphone">Reconectando con tu iPhone…</string>
     <string name="remote">Remoto</string>
     <string name="remote_server_address_contains_u_0000">La dirección del servidor remoto contiene U+0000</string>

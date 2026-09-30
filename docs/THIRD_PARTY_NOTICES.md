@@ -2,7 +2,7 @@
 
 ## Receiver
 
-PeugeotPlay is a modified version of [xcertplay by shilapi](https://github.com/shilapi/xcertplay). The upstream receiver is licensed under GNU GPL version 3; the full text is in `LICENSE` and the original README is retained in `docs/UPSTREAM-README.md`.
+PeugeotPlay is a modified version of [DiPlay by shihabal3amri](https://github.com/shihabal3amri/DiPlay) (v0.2.7, the Chinese build lineage of [xcertplay by shilapi](https://github.com/shilapi/xcertplay)). The upstream receiver is licensed under GNU GPL version 3; the full text is in `LICENSE` and the original README is retained in `docs/UPSTREAM-README.md`.
 
 Upstream credits [LIVI](https://github.com/f-io/LIVI) and [Showcase](https://github.com/amineross/showcase) for protocol research. Existing source comments and attribution are preserved.
 

@@ -271,7 +271,7 @@
     <string name="preparing_mfi_authentication">جارٍ تجهيز مصادقة MFi</string>
     <string name="ready">جاهز</string>
     <string name="ready_when_you_are">جاهز عندما تكون مستعداً</string>
-    <string name="receiver_based_on_xcertplay_licensed_under_gpl_3_0_peugeotplay">مستقبل مبني على xcertplay، مرخّص بموجب GPL-3.0. تتبع واجهة PeugeotPlay تصميم DiAuto، مرخّص بموجب AGPL-3.0.\n\nيتضمن AndroidX وBouncy Castle وJmDNS وSLF4J. يرافق هذا الإصدار الشفرة المصدر وإشعارات الترخيص.\n\n‏CarPlay وأيقونة CarPlay ملك لشركة Apple Inc. PeugeotPlay مشروع مستقل.</string>
+    <string name="receiver_based_on_xcertplay_licensed_under_gpl_3_0_peugeotplay">مستقبل مبني على xcertplay، مرخّص بموجب GPL-3.0. PeugeotPlay عمل مشتق مبني على DiPlay v0.2.7. تتبع واجهة PeugeotPlay تصميم DiAuto، مرخّص بموجب AGPL-3.0.\n\nيتضمن AndroidX وBouncy Castle وJmDNS وSLF4J. يرافق هذا الإصدار الشفرة المصدر وإشعارات الترخيص.\n\n‏CarPlay وأيقونة CarPlay ملك لشركة Apple Inc. PeugeotPlay مشروع مستقل.</string>
     <string name="reconnecting_to_your_iphone">جارٍ إعادة الاتصال بـ iPhone…</string>
     <string name="remote">عن بُعد</string>
     <string name="remote_server_address_contains_u_0000">عنوان الخادم البعيد يحتوي على U+0000</string>

@@ -276,7 +276,7 @@
     <string name="preparing_mfi_authentication">正在准备 MFi 认证</string>
     <string name="ready">就绪</string>
     <string name="ready_when_you_are">一切就绪</string>
-    <string name="receiver_based_on_xcertplay_licensed_under_gpl_3_0_peugeotplay">接收器基于采用 GPL-3.0 许可的 xcertplay。PeugeotPlay 界面沿用采用 AGPL-3.0 许可的 DiAuto 设计。\n\n项目包含 AndroidX、Bouncy Castle、JmDNS 和 SLF4J。本版本附有源代码和许可声明。\n\nCarPlay 和 CarPlay 图标归 Apple Inc. 所有。PeugeotPlay 是独立项目。</string>
+    <string name="receiver_based_on_xcertplay_licensed_under_gpl_3_0_peugeotplay">接收器基于采用 GPL-3.0 许可的 xcertplay，并由 DiPlay v0.2.7 二次开发而来。PeugeotPlay 界面沿用采用 AGPL-3.0 许可的 DiAuto 设计。\n\n项目包含 AndroidX、Bouncy Castle、JmDNS 和 SLF4J。本版本附有源代码和许可声明。\n\nCarPlay 和 CarPlay 图标归 Apple Inc. 所有。PeugeotPlay 是独立项目。</string>
     <string name="reconnecting_to_your_iphone">正在重新连接 iPhone…</string>
     <string name="remote">远程</string>
     <string name="remote_server_address_contains_u_0000">远程服务器地址包含 U+0000</string>
