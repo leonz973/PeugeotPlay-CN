@@ -132,10 +132,10 @@ class CarPlayHostActivity : ComponentActivity() {
         remoteMfiServer = remoteMfiServer.trim().takeIf { it.isNotEmpty() },
         remoteMfiToken = remoteMfiToken.takeIf { it.isNotEmpty() },
         identification = Iap2IdentificationConfig(
-            name = "DiPlay",
+            name = "PeugeotPlay",
             modelIdentifier = normalizedModel(),
             manufacturer = normalizedManufacturer(),
-            serialNumber = "DIPLAY-" + DiPlayBootstrap.deviceId(airPlayIdentity).replace(":", ""),
+            serialNumber = "PEUGEOTPLAY-" + PeugeotPlayBootstrap.deviceId(airPlayIdentity).replace(":", ""),
             firmwareVersion = "0.1.0",
             hardwareVersion = "1.0",
             carPlayUsbInterfaceNumber = 3,
@@ -143,10 +143,10 @@ class CarPlayHostActivity : ComponentActivity() {
             vehicleStatusEnabled = com.shilapi.xcertplay.hud.BydOutputSettings.batteryToIphone(this),
             chargingConnectors = com.shilapi.xcertplay.hud.BydOutputSettings.chargingConnectors(this),
         ),
-        label = "DiPlay",
-        hostName = "diplay-" + DiPlayBootstrap.deviceId(airPlayIdentity).replace(":", "").lowercase(),
-        hostMac = DiPlayBootstrap.deviceId(airPlayIdentity).split(":").map { it.toInt(16).toByte() }.toByteArray(),
-        wirelessBluetoothDeviceAddress = DiPlayPreferences.phoneAddress(this),
+        label = "PeugeotPlay",
+        hostName = "peugeotplay-" + PeugeotPlayBootstrap.deviceId(airPlayIdentity).replace(":", "").lowercase(),
+        hostMac = PeugeotPlayBootstrap.deviceId(airPlayIdentity).split(":").map { it.toInt(16).toByte() }.toByteArray(),
+        wirelessBluetoothDeviceAddress = PeugeotPlayPreferences.phoneAddress(this),
         transport = if (wirelessEnabled) CarPlayTransport.WIRELESS else CarPlayTransport.WIRED,
         wirelessHotspotMode = wirelessHotspotMode,
         manualHotspotSsid = manualHotspotSsid,
@@ -394,8 +394,8 @@ class CarPlayHostActivity : ComponentActivity() {
         if (intent.action == "android.hardware.usb.action.USB_DEVICE_ATTACHED") {
             AirPlayPersistence.saveWirelessEnabled(this, false)
         }
-        if (runCatching { DiPlayBootstrap.ensure(this) }.isFailure) {
-            startActivity(Intent(this, DiPlayActivity::class.java))
+        if (runCatching { PeugeotPlayBootstrap.ensure(this) }.isFailure) {
+            startActivity(Intent(this, PeugeotPlayActivity::class.java))
             finish(); return
         }
         window.addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
@@ -415,7 +415,7 @@ class CarPlayHostActivity : ComponentActivity() {
                     if (menuOpen) {
                         if (safeAreaEditorActive) closeSafeAreaEditor() else cancelSettingsEdits()
                     } else {
-                        showDiPlayHome()
+                        showPeugeotPlayHome()
                     }
                 }
             },
@@ -802,7 +802,7 @@ class CarPlayHostActivity : ComponentActivity() {
             setImageResource(R.drawable.ic_carplay); contentDescription = getString(R.string.carplay)
         }, LinearLayout.LayoutParams(dp(88), dp(88)))
         panel.addView(TextView(this).apply {
-            text = getString(R.string.diplay); textSize = 34f; setTextColor(Color.rgb(241, 245, 252))
+            text = getString(R.string.peugeotplay); textSize = 34f; setTextColor(Color.rgb(241, 245, 252))
             gravity = Gravity.CENTER; setPadding(0, dp(18), 0, dp(14))
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
         })
@@ -820,17 +820,17 @@ class CarPlayHostActivity : ComponentActivity() {
         panel.addView(Button(this).apply {
             text = getString(R.string.reset_carplay_wi_fi); isAllCaps = false; textSize = 18f
             visibility = View.GONE
-            setOnClickListener { showDiPlayHome("wireless-recovery") }
+            setOnClickListener { showPeugeotPlayHome("wireless-recovery") }
             wifiRecoveryButton = this
         }, LinearLayout.LayoutParams(dp(300), dp(64)).apply { bottomMargin = dp(12) })
         panel.addView(Button(this).apply {
-            text = getString(R.string.back_to_diplay); isAllCaps = false; textSize = 18f
+            text = getString(R.string.back_to_peugeotplay); isAllCaps = false; textSize = 18f
             setTextColor(Color.rgb(12, 17, 27))
             background = GradientDrawable().apply { setColor(Color.rgb(166, 200, 255)); cornerRadius = dp(20).toFloat() }
-            setOnClickListener { showDiPlayHome() }
+            setOnClickListener { showPeugeotPlayHome() }
         }, LinearLayout.LayoutParams(dp(300), dp(64)))
         panel.addView(TextView(this).apply {
-            text = getString(R.string.in_carplay_swipe_down_with_three_fingers_to_open_diplay_se)
+            text = getString(R.string.in_carplay_swipe_down_with_three_fingers_to_open_peugeotplay_se)
             textSize = 13f; gravity = Gravity.CENTER; setTextColor(Color.rgb(168, 182, 202)); setPadding(0, dp(20), 0, 0)
         })
         root.addView(panel, FrameLayout.LayoutParams(-1, -1))
@@ -2780,9 +2780,9 @@ class CarPlayHostActivity : ComponentActivity() {
         appendLog(support.details)
         appendLog(effectiveSummary)
         return AirPlayConfig(
-            deviceName = "DiPlay",
-            deviceId = DiPlayBootstrap.deviceId(airPlayIdentity),
-            btMac = DiPlayBluetooth.localAddress(this) ?: DiPlayBootstrap.deviceId(airPlayIdentity),
+            deviceName = "PeugeotPlay",
+            deviceId = PeugeotPlayBootstrap.deviceId(airPlayIdentity),
+            btMac = PeugeotPlayBluetooth.localAddress(this) ?: PeugeotPlayBootstrap.deviceId(airPlayIdentity),
             sourceVersion = "950.7.1",
             main = display,
             cluster = clusterDisplayConfig(),
@@ -3063,7 +3063,7 @@ class CarPlayHostActivity : ComponentActivity() {
         sink = snapshot.sink
         CarPlayBackgroundSession.store(snapshot.controller, snapshot.sink, snapshot.width, snapshot.height, this) { completion ->
             runOnUiThread {
-                shutdown(false, "DiPlay disconnect", completion)
+                shutdown(false, "PeugeotPlay disconnect", completion)
                 finish()
             }
         }
@@ -3168,17 +3168,17 @@ class CarPlayHostActivity : ComponentActivity() {
         CarPlayMediaKeys.attach(this, next)
         CarPlayBackgroundSession.store(next, renderer, size.width, size.height, this) { completion ->
             runOnUiThread {
-                shutdown(terminateProcess = false, reason = "DiPlay disconnect", completion = completion)
+                shutdown(terminateProcess = false, reason = "PeugeotPlay disconnect", completion = completion)
                 finish()
             }
         }
         try {
-            startForegroundService(Intent(this, DiPlaySessionService::class.java))
+            startForegroundService(Intent(this, PeugeotPlaySessionService::class.java))
             next.start()
         } catch (error: RuntimeException) {
             appendLog("Connection could not start: ${error.javaClass.simpleName}")
             shutdown(false, "foreground service could not start")
-            setConnectionStage(getString(R.string.could_not_start_carplay_return_to_diplay_and_check_app_per))
+            setConnectionStage(getString(R.string.could_not_start_carplay_return_to_peugeotplay_and_check_app_per))
         }
     }
 
@@ -3326,13 +3326,13 @@ class CarPlayHostActivity : ComponentActivity() {
         }
     }
 
-    private fun showDiPlayHome(page: String = "home") {
+    private fun showPeugeotPlayHome(page: String = "home") {
         controller?.sendTouch(emptyList())
-        startActivity(Intent(this, DiPlayActivity::class.java)
+        startActivity(Intent(this, PeugeotPlayActivity::class.java)
             .putExtra("page", page).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT))
     }
 
-    private fun openSettingsMenu() = showDiPlayHome("settings")
+    private fun openSettingsMenu() = showPeugeotPlayHome("settings")
 
     private fun saveSettingsAndReconnect() {
         if (!menuOpen) return
@@ -3397,7 +3397,7 @@ class CarPlayHostActivity : ComponentActivity() {
                 applicationContext.stopService(Intent(applicationContext, CarPlayVpnService::class.java))
             }
             Log.i(TAG, "shutdown complete clean=$clean")
-            applicationContext.stopService(Intent(applicationContext, DiPlaySessionService::class.java))
+            applicationContext.stopService(Intent(applicationContext, PeugeotPlaySessionService::class.java))
             teardownExecutor.shutdown()
             mainHandler.post { completion() }
             if (terminateProcess) Process.killProcess(Process.myPid())
@@ -3523,8 +3523,8 @@ class CarPlayHostActivity : ComponentActivity() {
 
     private fun friendlyStage(message: String): String = when {
         message.contains("Turn on Wi-Fi", true) -> getString(R.string.turn_on_wi_fi_in_the_head_unit_s_settings_to_connect)
-        message.contains("Allow precise Location", true) -> getString(R.string.allow_precise_location_for_diplay_in_the_head_unit_s_app_p)
-        message.contains("Allow Nearby devices", true) -> getString(R.string.allow_nearby_devices_for_diplay_in_the_head_unit_s_app_per)
+        message.contains("Allow precise Location", true) -> getString(R.string.allow_precise_location_for_peugeotplay_in_the_head_unit_s_app_p)
+        message.contains("Allow Nearby devices", true) -> getString(R.string.allow_nearby_devices_for_peugeotplay_in_the_head_unit_s_app_per)
         message.contains("createGroup failed", true) -> getString(R.string.the_head_unit_couldn_t_start_carplay_wi_fi_check_wi_fi_and)
         message.contains("needs a reset", true) -> getString(R.string.a_previous_wi_fi_direct_connection_is_still_running_reset)
         message.contains("socket", true) || message.contains("RFCOMM", true) -> getString(R.string.your_iphone_isn_t_available_unlock_it_and_check_bluetooth)
@@ -3552,11 +3552,11 @@ class CarPlayHostActivity : ComponentActivity() {
         "${SimpleDateFormat("HH:mm:ss.SSS", Locale.US).format(Date(nowMillis))}  $message"
 
     private fun initializeSessionLog() {
-        val logFile = File(File(filesDir, "logs"), "diplay.log")
+        val logFile = File(File(filesDir, "logs"), "peugeotplay.log")
         val activeLog = SessionLogFile(logFile)
         runCatching {
             activeLog.reset(
-                "DiPlay log started " +
+                "PeugeotPlay log started " +
                     "${SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).format(Date())} " +
                     "pid=${Process.myPid()} path=${logFile.absolutePath}",
             )

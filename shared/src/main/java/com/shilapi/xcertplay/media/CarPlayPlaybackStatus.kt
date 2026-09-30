@@ -5,7 +5,7 @@ import com.shilapi.xcertplay.iap2.wire.Iap2Frame
 
 /**
  * Whether the iPhone reports media as playing, from the playback status in iAP2 NowPlayingUpdate
- * (0x5001), which DiPlay already subscribes to. The update carries only what changed, so frames
+ * (0x5001), which PeugeotPlay already subscribes to. The update carries only what changed, so frames
  * without a status leave the state as it is.
  */
 class CarPlayPlaybackStatus {

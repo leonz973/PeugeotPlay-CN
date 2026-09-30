@@ -6,10 +6,10 @@ from html import escape as e
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / 'site'
 data = json.loads((SITE / 'content.json').read_text())
-BASE = 'https://shihabal3amri.github.io/DiPlay/'
-REPO = 'https://github.com/shihabal3amri/DiPlay'
-RELEASE = REPO + '/releases/tag/v0.2.7'
-DOWNLOAD = REPO + '/releases/download/v0.2.7/DiPlay-0.2.7.apk'
+BASE = 'https://leonz973.github.io/PeugeotPlay-CN/'
+REPO = 'https://github.com/leonz973/PeugeotPlay-CN'
+RELEASE = REPO + '/releases'
+DOWNLOAD = REPO + '/releases/latest'
 for lang, d in data.items():
     folder = SITE if lang == 'en' else SITE / lang
     folder.mkdir(exist_ok=True)
@@ -20,11 +20,11 @@ for lang, d in data.items():
     pics = ''.join(f'<figure><a href="{prefix}assets/{pic}.png"><img src="{prefix}assets/{pic}.png" width="1920" height="1080" loading="lazy" alt="{e(cap)}"></a><figcaption>{e(cap)}</figcaption></figure>' for pic,cap in zip(['home','settings'],d['captions']))
     (folder/'index.html').write_text(f'''<!doctype html>
 <html lang="{lang}" dir="{d['dir']}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DiPlay · {e(d['download'])}</title><meta name="description" content="{e(d['intro'])}"><meta name="theme-color" content="#0c121c">
+<title>PeugeotPlay · {e(d['download'])}</title><meta name="description" content="{e(d['intro'])}"><meta name="theme-color" content="#0c121c">
 <link rel="icon" href="{prefix}assets/icon.png"><link rel="stylesheet" href="{prefix}assets/site.css"><link rel="canonical" href="{url}">{alternates}
-<meta property="og:title" content="DiPlay — CarPlay for compatible Android head units"><meta property="og:description" content="{e(d['promise'])}"><meta property="og:image" content="{BASE}assets/home.png"><meta property="og:url" content="{url}"><meta property="og:type" content="website">
+<meta property="og:title" content="PeugeotPlay — CarPlay for compatible Android head units"><meta property="og:description" content="{e(d['promise'])}"><meta property="og:image" content="{BASE}assets/home.png"><meta property="og:url" content="{url}"><meta property="og:type" content="website">
 </head><body><main>
-<header><a class="brand" href="{prefix}"><img src="{prefix}assets/icon.png" width="56" height="56" alt=""><span><strong>DiPlay</strong><small>{e(d['tag'])}</small></span></a><nav class="languages" aria-label="Language">{nav}</nav></header>
+<header><a class="brand" href="{prefix}"><img src="{prefix}assets/icon.png" width="56" height="56" alt=""><span><strong>PeugeotPlay</strong><small>{e(d['tag'])}</small></span></a><nav class="languages" aria-label="Language">{nav}</nav></header>
 <section class="hero"><span class="badge">{e(d['badge'])} · <bdi>0.2.7</bdi></span><h1>{e(d['title']).replace(chr(10),'<br>')}</h1><p class="intro">{e(d['intro'])}</p><div class="actions"><a class="button" href="{DOWNLOAD}">{e(d['download'])} <span aria-hidden="true">↓</span></a><a class="button secondary" href="#install">{e(d['install'])}</a></div><p class="promise">{e(d['promise'])}</p><p class="note">{e(d['requires'])}</p><p class="note support-scope"><strong>{e(d['supportScope'])}</strong></p></section>
 <section class="gallery"><h2>{e(d['gallery'])}</h2><div class="screens">{pics}</div></section>
 <div class="grid"><section class="card" id="install"><span class="eyebrow">01</span><h2>{e(d['setup'])}</h2><ol>{''.join('<li>'+e(x)+'</li>' for x in d['steps'])}</ol><p class="note">{e(d['bssid'])}</p><a href="{REPO}/blob/main/docs/INSTALL.md">{e(d['adb'])} ↗</a></section>

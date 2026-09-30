@@ -22,7 +22,7 @@ object AppLocale {
 
     val ALL = listOf(SYSTEM, ENGLISH, SIMPLIFIED_CHINESE, ARABIC, RUSSIAN, SPANISH)
 
-    private const val PREFS = "diplay"
+    private const val PREFS = "peugeotplay"
     private const val KEY_LANGUAGE = "app_language"
 
     private const val KEY_MIGRATED = "app_language_platform_migrated"

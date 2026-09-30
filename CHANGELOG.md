@@ -1,4 +1,4 @@
-# DiPlay 0.2.7 — 2026-09-29
+# PeugeotPlay 0.2.7 — 2026-09-29
 
 - App interface in English, Simplified Chinese, Arabic, Russian and Spanish; synchronized Android app-language settings.
 - Steering-wheel media controls and long-press Siri on supported BYD firmware while CarPlay is on screen.

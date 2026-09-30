@@ -10,7 +10,7 @@
     <!-- Optional, owner-enabled Usage Access for the verified DiLink 5.1 cluster profile. -->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" />
     <application>
-        <activity android:name="com.shilapi.xcertplay.DiPlayActivity"
+        <activity android:name="com.shilapi.xcertplay.PeugeotPlayActivity"
             android:exported="true" android:launchMode="singleTop"
             android:configChanges="density|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
             android:theme="@style/Theme.Xcertplay">
@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.shilapi.xcertplay.DiPlaySessionService"
+        <service android:name="com.shilapi.xcertplay.PeugeotPlaySessionService"
             android:exported="false" android:foregroundServiceType="connectedDevice|microphone" />
 
         <activity

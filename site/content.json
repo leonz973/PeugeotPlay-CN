@@ -5,7 +5,7 @@
     "tag": "Independent community project",
     "badge": "PUBLIC PREVIEW",
     "title": "Your iPhone.\nAt home in your car.",
-    "intro": "Maps, music and conversations on your car display. DiPlay brings wired and wireless CarPlay to compatible Android head units, with the familiar DiAuto interface.",
+    "intro": "Maps, music and conversations on your car display. PeugeotPlay brings wired and wireless CarPlay to compatible Android head units, with the familiar DiAuto interface.",
     "download": "Download APK",
     "install": "How to install",
     "promise": "No jailbreak, dongle, account or authentication server required.",
@@ -18,7 +18,7 @@
     "setup": "Install on your car",
     "steps": [
       "While parked, download the APK and install it using the method supported by your head unit.",
-      "Open DiPlay and allow the requested Bluetooth, Wi-Fi/location and microphone permissions.",
+      "Open PeugeotPlay and allow the requested Bluetooth, Wi-Fi/location and microphone permissions.",
       "Turn on the car’s built-in hotspot (5 GHz if available). In Settings → Connection setup, select Built-in car hotspot and save its exact name and password. Keep phone Wi-Fi and Bluetooth on, pair with the car, then tap Connect phone and accept the phone prompts.",
       "For wired use, connect a USB data cable and choose Connect with USB. Approve any USB, Trust or local VPN prompts."
     ],
@@ -53,7 +53,7 @@
     "tag": "مشروع مجتمعي مستقل",
     "badge": "نسخة تجريبية عامة",
     "title": "آيفونك.\nعلى شاشة سيارتك.",
-    "intro": "خرائطك وموسيقاك ومحادثاتك على شاشة السيارة. يوفّر DiPlay كار بلاي سلكياً ولاسلكياً لشاشات أندرويد المتوافقة، بواجهة مألوفة من DiAuto.",
+    "intro": "خرائطك وموسيقاك ومحادثاتك على شاشة السيارة. يوفّر PeugeotPlay كار بلاي سلكياً ولاسلكياً لشاشات أندرويد المتوافقة، بواجهة مألوفة من DiAuto.",
     "download": "تنزيل APK",
     "install": "طريقة التثبيت",
     "promise": "لا حاجة إلى جيلبريك أو قطعة خارجية أو حساب أو خادم مصادقة.",
@@ -66,7 +66,7 @@
     "setup": "التثبيت على شاشة السيارة",
     "steps": [
       "والسيارة متوقفة، نزّل ملف APK وثبّته بالطريقة التي تدعمها شاشة سيارتك.",
-      "افتح DiPlay وامنح أذونات البلوتوث والواي فاي/الموقع والميكروفون المطلوبة.",
+      "افتح PeugeotPlay وامنح أذونات البلوتوث والواي فاي/الموقع والميكروفون المطلوبة.",
       "شغّل نقطة اتصال السيارة المدمجة واختر 5 غيغاهرتز إن توفر. من الإعدادات ← إعداد الاتصال، اختر نقطة اتصال السيارة وأدخل الاسم وكلمة المرور بدقة. أبقِ Wi-Fi وBluetooth مفعّلين على الهاتف، واقرنه بالسيارة، ثم اضغط توصيل الهاتف ووافق على الطلبات.",
       "للاتصال السلكي، استخدم كابل USB يدعم نقل البيانات واختر Connect with USB. وافق على طلبات USB أو الوثوق أو اتصال VPN المحلي إن ظهرت."
     ],
@@ -101,7 +101,7 @@
     "tag": "Независимый проект сообщества",
     "badge": "ОТКРЫТОЕ ТЕСТИРОВАНИЕ",
     "title": "Ваш iPhone.\nНа экране автомобиля.",
-    "intro": "Карты, музыка и общение на экране автомобиля. DiPlay добавляет проводной и беспроводной CarPlay на совместимые головные устройства Android со знакомым интерфейсом DiAuto.",
+    "intro": "Карты, музыка и общение на экране автомобиля. PeugeotPlay добавляет проводной и беспроводной CarPlay на совместимые головные устройства Android со знакомым интерфейсом DiAuto.",
     "download": "Скачать APK",
     "install": "Как установить",
     "promise": "Без джейлбрейка, адаптера, аккаунта и сервера аутентификации.",
@@ -114,7 +114,7 @@
     "setup": "Установка в автомобиле",
     "steps": [
       "На стоянке скачайте APK и установите его способом, поддерживаемым головным устройством.",
-      "Откройте DiPlay и предоставьте запрошенные разрешения Bluetooth, Wi-Fi/геолокации и микрофона.",
+      "Откройте PeugeotPlay и предоставьте запрошенные разрешения Bluetooth, Wi-Fi/геолокации и микрофона.",
       "Включите встроенную точку доступа автомобиля (5 ГГц, если доступно). В Настройки → Настройка подключения выберите точку доступа автомобиля и сохраните её точные имя и пароль. Включите Wi-Fi и Bluetooth на телефоне, выполните сопряжение с автомобилем, нажмите «Подключить телефон» и подтвердите запросы.",
       "Для проводного подключения используйте USB-кабель с передачей данных и нажмите Connect with USB. Подтвердите запросы USB, доверия и локального VPN, если они появятся."
     ],
@@ -149,7 +149,7 @@
     "tag": "Proyecto comunitario independiente",
     "badge": "VERSIÓN PRELIMINAR PÚBLICA",
     "title": "Tu iPhone.\nEn la pantalla de tu coche.",
-    "intro": "Mapas, música y conversaciones en la pantalla del coche. DiPlay ofrece CarPlay por USB e inalámbrico en unidades Android compatibles, con la interfaz familiar de DiAuto.",
+    "intro": "Mapas, música y conversaciones en la pantalla del coche. PeugeotPlay ofrece CarPlay por USB e inalámbrico en unidades Android compatibles, con la interfaz familiar de DiAuto.",
     "download": "Descargar APK",
     "install": "Cómo instalar",
     "promise": "Sin jailbreak, adaptador, cuenta ni servidor de autenticación.",
@@ -162,7 +162,7 @@
     "setup": "Instalar en el coche",
     "steps": [
       "Con el coche estacionado, descarga el APK e instálalo mediante el método que admita tu unidad.",
-      "Abre DiPlay y concede los permisos solicitados de Bluetooth, Wi-Fi/ubicación y micrófono.",
+      "Abre PeugeotPlay y concede los permisos solicitados de Bluetooth, Wi-Fi/ubicación y micrófono.",
       "Activa el punto de acceso integrado del coche (5 GHz si está disponible). En Ajustes → Configuración de conexión, selecciónalo y guarda su nombre y contraseña exactos. Mantén Wi-Fi y Bluetooth activos en el teléfono, emparéjalo con el coche, pulsa Conectar teléfono y acepta las indicaciones.",
       "Para USB, usa un cable de datos y pulsa Connect with USB. Acepta las solicitudes de USB, confianza o VPN local que aparezcan."
     ],
@@ -197,7 +197,7 @@
     "tag": "独立社区项目",
     "badge": "公开预览版",
     "title": "你的 iPhone。\n你的车载屏幕。",
-    "intro": "在车载屏幕上使用地图、音乐和通话。DiPlay 为兼容的安卓车机带来有线和无线 CarPlay，采用熟悉的 DiAuto 界面。",
+    "intro": "在车载屏幕上使用地图、音乐和通话。PeugeotPlay 为兼容的安卓车机带来有线和无线 CarPlay，采用熟悉的 DiAuto 界面。",
     "download": "下载 APK",
     "install": "安装方法",
     "promise": "无需越狱、转接盒、账号或认证服务器。",
@@ -210,7 +210,7 @@
     "setup": "安装到车机",
     "steps": [
       "停车后下载 APK，并通过车机支持的方式安装。",
-      "打开 DiPlay，授予所需的蓝牙、Wi-Fi/位置及麦克风权限。",
+      "打开 PeugeotPlay，授予所需的蓝牙、Wi-Fi/位置及麦克风权限。",
       "开启车机内置热点，如可选请使用 5 GHz。在“设置 → 连接设置”中选择车机内置热点，准确填写并保存名称和密码。保持手机 Wi-Fi 和蓝牙开启，与车机配对后点击“连接手机”，并同意手机上的提示。",
       "有线连接请使用 USB 数据线，并点击 Connect with USB。如出现 USB、信任或本地 VPN 提示，请确认。"
     ],

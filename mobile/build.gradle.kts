@@ -4,7 +4,7 @@ plugins {
 }
 
 // Optional local-only input. CI and ordinary source builds contain no accessory identity.
-val localAuthenticationAssets = providers.environmentVariable("DIPLAY_AUTH_ASSETS_DIR")
+val localAuthenticationAssets = providers.environmentVariable("PEUGEOTPLAY_AUTH_ASSETS_DIR")
     .orNull?.let { file(it).canonicalFile }
 
 android {
@@ -14,7 +14,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.shihab.diplay.cn"
+        applicationId = "com.peugeotplay.cn"
         minSdk = 28
         targetSdk = 37
         versionCode = 26
@@ -103,7 +103,7 @@ val verifyStandaloneAuthentication by tasks.registering {
     val directory = localAuthenticationAssets
     doLast {
         check(directory != null) {
-            "Standalone car builds require DIPLAY_AUTH_ASSETS_DIR; assembleDebug alone is source-only."
+            "Standalone car builds require PEUGEOTPLAY_AUTH_ASSETS_DIR; assembleDebug alone is source-only."
         }
         check(listOf("identity.pk8", "certificate.p7b").all {
             directory.resolve("offline-mfi/$it").let { file -> file.isFile && file.length() > 0 }

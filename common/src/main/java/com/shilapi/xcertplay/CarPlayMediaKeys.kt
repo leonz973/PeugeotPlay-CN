@@ -18,12 +18,12 @@ import com.shilapi.xcertplay.orchestration.CarPlayController
  * Steering-wheel and other hardware media buttons for CarPlay.
  *
  * Android delivers media keys to a media session; BYD picks the session of the audio-focus
- * owner. Once CarPlay plays music, DiPlay holds audio focus and an active session until the
+ * owner. Once CarPlay plays music, PeugeotPlay holds audio focus and an active session until the
  * CarPlay session ends, so play also works after a pause. Keys go to the iPhone as CarPlay media
  * HID presses ([CarPlayMediaButton]).
  */
 internal object CarPlayMediaKeys {
-    private const val TAG = "DiPlay-MediaKeys"
+    private const val TAG = "PeugeotPlay-MediaKeys"
     private const val ACTIONS = PlaybackState.ACTION_PLAY or PlaybackState.ACTION_PAUSE or
         PlaybackState.ACTION_PLAY_PAUSE or PlaybackState.ACTION_SKIP_TO_NEXT or PlaybackState.ACTION_SKIP_TO_PREVIOUS
 
@@ -102,7 +102,7 @@ internal object CarPlayMediaKeys {
         val granted = audio?.requestAudioFocus(request) == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
         focusRequest = request
         focusHeld = granted
-        session = MediaSession(context, "DiPlay CarPlay").apply {
+        session = MediaSession(context, "PeugeotPlay CarPlay").apply {
             setCallback(callback, mainHandler)
             isActive = true
         }

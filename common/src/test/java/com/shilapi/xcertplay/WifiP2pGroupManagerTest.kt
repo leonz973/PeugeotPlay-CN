@@ -273,7 +273,7 @@ class WifiP2pGroupManagerTest {
         assertTrue(logs.any { it.contains("cleanup skipped=another_app_owns_group") })
     }
 
-    @Test fun staleCloseCannotRemoveANewerDiPlaySession() {
+    @Test fun staleCloseCannotRemoveANewerPeugeotPlaySession() {
         val old = WifiP2pGroupManager(context)
         val previous = background { old.start(5000) }
         // The framework has lost the old group; a new controller acquires a fresh one.

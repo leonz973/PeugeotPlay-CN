@@ -35,7 +35,7 @@ jobs:
           assets="$RUNNER_TEMP/auth-assets"
           curl -fsSL -o "$apk" "$OFFICIAL_APK_URL"
           python3 scripts/extract_official_identity.py "$apk" "$assets" "$OFFICIAL_APK_SHA256"
-          echo "DIPLAY_AUTH_ASSETS_DIR=$assets" >> "$GITHUB_ENV"
+          echo "PEUGEOTPLAY_AUTH_ASSETS_DIR=$assets" >> "$GITHUB_ENV"
       - name: Test and build standalone debug APK
         run: ./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :mobile:lintDebug :mobile:assembleStandaloneDebug --stacktrace
       - name: Verify identity is inside the APK and not in git
@@ -47,7 +47,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          apk="DiPlay-cn-${GITHUB_REF_NAME}.apk"
+          apk="PeugeotPlay-cn-${GITHUB_REF_NAME}.apk"
           cp mobile/build/outputs/apk/debug/mobile-debug.apk "$apk"
           sha256sum "$apk" > "$apk.sha256"
           cp docs/GITHUB_RELEASE.md release-notes.md
@@ -57,12 +57,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          apk="DiPlay-cn-${GITHUB_REF_NAME}.apk"
+          apk="PeugeotPlay-cn-${GITHUB_REF_NAME}.apk"
           gh release delete "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --yes || true
           gh release create "$GITHUB_REF_NAME" \
-            "$apk#DiPlay CN" \
+            "$apk#PeugeotPlay CN" \
             "$apk.sha256#SHA-256" \
             --repo "$GITHUB_REPOSITORY" \
             --verify-tag \
-            --title "DiPlay CN 0.2.7" \
+            --title "PeugeotPlay CN 0.2.7" \
             --notes-file release-notes.md

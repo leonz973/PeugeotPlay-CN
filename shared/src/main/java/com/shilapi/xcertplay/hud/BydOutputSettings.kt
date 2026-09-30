@@ -8,7 +8,7 @@ import com.shilapi.xcertplay.transport.EvChargingConnectors
  * instrument cluster receives, so separate HUD/cluster switches cannot behave independently.
  */
 object BydOutputSettings {
-    private const val PREFS = "diplay_byd_outputs"
+    private const val PREFS = "peugeotplay_byd_outputs"
     private const val KEY_ENABLED = "navigation_enabled"
     private const val KEY_CLUSTER_STREAM_PAUSE = "cluster_stream_pause"
     private const val KEY_BATTERY_TO_IPHONE = "battery_to_iphone"

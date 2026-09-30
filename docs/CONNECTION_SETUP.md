@@ -1,10 +1,10 @@
 # Built-in car hotspot setup
 
-DiAuto & DiPlay — Built-in car hotspot test builds
+DiAuto & PeugeotPlay — Built-in car hotspot test builds
 28 September 2026
 
 DiAuto-connection-setup-test.apk: Android phone / Android Auto
-DiPlay-connection-setup-test.apk: iPhone / Apple CarPlay
+PeugeotPlay-connection-setup-test.apk: iPhone / Apple CarPlay
 Install the APK on the car, not on your phone. Update the matching existing
 test app without uninstalling to preserve settings.
 
@@ -16,7 +16,7 @@ details before connecting.
 BUILT-IN HOTSPOT SETUP — BOTH APPS
 1. In the car's settings, turn on its built-in Wi-Fi hotspot. Select 5 GHz
    if available. Note the hotspot name and password exactly.
-2. Open DiAuto or DiPlay on the car. Go to Settings → Connection setup
+2. Open DiAuto or PeugeotPlay on the car. Go to Settings → Connection setup
    (tap Open connection setup if shown).
 3. Select Built-in car hotspot. Tap Save hotspot details and use this mode
    (or Edit saved hotspot), enter the car's hotspot name and password, and
@@ -24,7 +24,7 @@ BUILT-IN HOTSPOT SETUP — BOTH APPS
 4. Turn on Bluetooth and Wi-Fi on your phone. Pair it with the car's
    Bluetooth. Allow the app permissions requested on the car.
 5. Return to the app and tap Connect phone. Select your phone when asked.
-   In DiPlay, use Choose iPhone if you need to select a different phone.
+   In PeugeotPlay, use Choose iPhone if you need to select a different phone.
 6. Accept the Android Auto or CarPlay prompts on your phone.
 
 You do not need to join the hotspot manually on your phone before tapping
@@ -35,7 +35,7 @@ required; phone internet availability depends on its network settings.
 If you change the car hotspot name or password, update it in the app too.
 Test one projection app at a time.
 
-OPTIONAL: DIPLAY AUTOMATIC INSTRUMENT MAP
+OPTIONAL: PEUGEOTPLAY AUTOMATIC INSTRUMENT MAP
 On the supported DiLink 5.1 firmware, open Settings → BYD navigation →
 Automatic map setup · ADB. Follow the displayed one-time computer setup,
 then tap Check and enable. Open the cluster's map card or select Map theme.
@@ -48,5 +48,5 @@ music/audio, and any instrument-map features supported by your car.
 If something fails, note the time and steps, car model, DiLink/Android
 version, phone model/OS, and which app you used. Export a diagnostic report
 from Settings → Diagnostics → Save diagnostic report. Reports are saved
-under Downloads/DiAuto or Downloads/DiPlay. Share the report with your test
+under Downloads/DiAuto or Downloads/PeugeotPlay. Share the report with your test
 feedback; do not include your hotspot password.

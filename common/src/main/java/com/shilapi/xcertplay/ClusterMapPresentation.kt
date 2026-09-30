@@ -31,7 +31,7 @@ import com.shilapi.xcertplay.host.R
  *
  * BYD exposes the cluster's projection area as public presentation displays owned by
  * com.byd.containerservice; the stock map (com.byd.launchermap) draws there the same way. The
- * cluster only shows this display while its projection mode is on, which DiPlay cannot switch.
+ * cluster only shows this display while its projection mode is on, which PeugeotPlay cannot switch.
  */
 internal class ClusterMapPresentation(
     context: Context,
@@ -132,7 +132,7 @@ internal class ClusterMapPresentation(
     }
 
     companion object {
-        const val TAG = "DiPlay-Cluster"
+        const val TAG = "PeugeotPlay-Cluster"
 
         /** A verified 5.1 profile chooses its layer explicitly; other firmware keeps PR #5 behavior. */
         fun findDisplay(context: Context, theme: DiLink51ClusterLayout.Theme = DiLink51ClusterLayout.theme(context)): Display? {
@@ -160,7 +160,7 @@ internal class ClusterMapPresentation(
     }
 }
 
-/** Shading belongs to DiPlay's map only; no stock cluster window is changed or covered outside the side card. */
+/** Shading belongs to PeugeotPlay's map only; no stock cluster window is changed or covered outside the side card. */
 private class InstrumentContrastView(
     context: Context,
     private val plan: DiLink51ClusterLayout.Plan,

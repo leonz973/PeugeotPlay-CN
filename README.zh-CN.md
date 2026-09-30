@@ -1,12 +1,12 @@
-# DiPlay CN
+# PeugeotPlay CN
 
-本仓库基于上游 DiPlay `v0.2.7`。桌面名称为 **DiPlay CN**，包名为 `com.shihab.diplay.cn`，可与官方正式版并存。
+本仓库基于上游 DiPlay `v0.2.7`。桌面名称为 **PeugeotPlay CN**，包名为 `com.peugeotplay.cn`，可与官方正式版并存。
 
 为兼容的比亚迪安卓车机提供有线及无线 CarPlay，采用 DiAuto 风格界面。
 
 > 这些项目专注于比亚迪汽车。它们可能在其他品牌上运行，但其他品牌不在支持范围内，也没有增加支持或修复其品牌特定兼容性问题的计划。
 
-[下载与中文网站](https://shihabal3amri.github.io/DiPlay/zh-Hans/) · [完整说明](README.md) · [报告问题](https://github.com/shihabal3amri/DiPlay/issues/new/choose)
+[下载与中文网站](https://github.com/leonz973/PeugeotPlay-CN/releases/latest) · [完整说明](README.md) · [报告问题](https://github.com/leonz973/PeugeotPlay-CN/issues/new/choose)
 
 0.2.7 为公开预览版，未经 Apple 认证。请安装在车机上，而非 iPhone。无需越狱、转接盒或认证服务器。无线连接支持车载热点或 Wi-Fi Direct（后者需要 Android 10 或更高版本）。
 

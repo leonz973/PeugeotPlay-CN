@@ -1,4 +1,4 @@
-DiPlay CN，基于上游 DiPlay v0.2.7 的简体中文构建。
+PeugeotPlay CN，基于上游 DiPlay v0.2.7 的简体中文构建。
 
 请安装在车机上，不要安装在 iPhone 上。车机必须允许安装 APK。有线连接需要 Android 9 及以上，无线 Wi-Fi Direct 需要 Android 10 及以上。
 

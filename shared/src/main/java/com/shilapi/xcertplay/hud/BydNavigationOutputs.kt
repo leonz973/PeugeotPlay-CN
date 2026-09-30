@@ -13,9 +13,9 @@ object BydNavigationOutputs {
     }
     fun setDiagnosticHold(hold: Boolean) { BydStandaloneHudOutput.syntheticHold = hold }
     @Volatile private var useStandalone = false
-    private val standalone = NavigationOutputWorker("diplay-standalone-output", BydStandaloneNavigationBridge::clear)
-    private val hud = NavigationOutputWorker("diplay-hud-output", BydHudBridge::clear)
-    private val cluster = NavigationOutputWorker("diplay-cluster-output", BydClusterBridge::clear)
+    private val standalone = NavigationOutputWorker("peugeotplay-standalone-output", BydStandaloneNavigationBridge::clear)
+    private val hud = NavigationOutputWorker("peugeotplay-hud-output", BydHudBridge::clear)
+    private val cluster = NavigationOutputWorker("peugeotplay-cluster-output", BydClusterBridge::clear)
 
     /** The host reports whether its CarPlay map window is on the cluster (see [BydClusterMapPause]). */
     fun setClusterMapShown(shown: Boolean) { BydClusterMapPause.clusterMapShown = shown }
