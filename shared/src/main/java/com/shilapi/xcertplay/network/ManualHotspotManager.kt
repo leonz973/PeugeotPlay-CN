@@ -255,7 +255,7 @@ class ManualHotspotManager(
     }
 
     private fun NetworkInterface.hotspotAddress(): InetAddress? =
-        wirelessHostAddress(Collections.list(inetAddresses), index)
+        wirelessHostAddress(Collections.list(inetAddresses), index, preferIpv4 = true)
 
     private fun frequencyFromConnectionInfo(): Int? {
         val connectionInfo = try {
