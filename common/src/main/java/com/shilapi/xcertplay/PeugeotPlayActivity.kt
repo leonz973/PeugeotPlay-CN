@@ -177,6 +177,7 @@ class PeugeotPlayActivity : ComponentActivity() {
         card.addView(connectButton, matchButton())
         val connectionHint = when (AirPlayPersistence.loadWirelessHotspotMode(this)) {
             WirelessHotspotMode.MANUAL -> getString(R.string.hotspot_hint_manual)
+            WirelessHotspotMode.CLIENT -> getString(R.string.hotspot_hint_client)
             WirelessHotspotMode.LOCAL_ONLY_HOTSPOT -> getString(R.string.hotspot_hint_local)
             else -> getString(R.string.hotspot_hint_p2p)
         }
@@ -502,9 +503,10 @@ class PeugeotPlayActivity : ComponentActivity() {
 
     private fun wirelessLinkControls(parent: LinearLayout) {
         val mode = if (pendingCarHotspotSetup) WirelessHotspotMode.MANUAL else AirPlayPersistence.loadWirelessHotspotMode(this)
-        val modes = listOf(WirelessHotspotMode.MANUAL, WirelessHotspotMode.WIFI_P2P)
-        val titles = listOf(getString(R.string.built_in_car_hotspot), getString(R.string.wifi_direct))
+        val modes = listOf(WirelessHotspotMode.CLIENT, WirelessHotspotMode.MANUAL, WirelessHotspotMode.WIFI_P2P)
+        val titles = listOf(getString(R.string.client_network), getString(R.string.built_in_car_hotspot), getString(R.string.wifi_direct))
         val descriptions = listOf(
+            getString(R.string.hotspot_mode_client_desc),
             getString(R.string.hotspot_mode_manual_desc),
             getString(R.string.hotspot_mode_p2p_desc)
         )
@@ -527,21 +529,34 @@ class PeugeotPlayActivity : ComponentActivity() {
             }, matchButton(12, 60))
             option.addView(label(descriptions[index], 15, MUTED).apply { setPadding(0, dp(6), 0, dp(12)) })
         }
-        if (mode == WirelessHotspotMode.MANUAL) {
-            parent.addView(label(getString(R.string.hotspot_setup), 22, TEXT, true))
-            parent.addView(label(getString(R.string.s_1_open_car_hotspot_settings_turn_the_hotspot_on_and_sele), 16, MUTED).apply { setPadding(0, dp(8), 0, dp(12)) })
-            parent.addView(button(getString(R.string.open_car_hotspot_settings), false) { openCarWifiSettings() }, matchButton(0, 60))
-            parent.addView(button(if (pendingCarHotspotSetup) getString(R.string.save_hotspot_details_and_use_this_mode) else "${getString(R.string.edit_saved_hotspot_prefix)}${storedSsid()}", false) {
-                askHotspotCredentials { ssid, password ->
-                    saveHotspotCredentials(ssid, password)
-                    pendingCarHotspotSetup = false
-                    applyWirelessLink(WirelessHotspotMode.MANUAL)
-                }
-            }, matchButton(12, 60))
-            parent.addView(label(if (pendingCarHotspotSetup) getString(R.string.finish_setup_save_your_hotspot_details_to_use_this_mode) else if (carHotspotOff()) getString(R.string.hotspot_details_off) else getString(R.string.hotspot_details_saved), 15, if (carHotspotOff()) WARNING else MUTED).apply { setPadding(0, dp(12), 0, 0) })
-        } else {
-            parent.addView(label(getString(R.string.turn_the_car_s_wi_fi_switch_on_allow_location_nearby_devic), 16, MUTED))
-            parent.addView(button(getString(R.string.open_car_wi_fi_settings), false) { openCarClientWifiSettings() }, matchButton(12, 60))
+        when (mode) {
+            WirelessHotspotMode.CLIENT -> {
+                parent.addView(label(getString(R.string.client_network_step), 16, MUTED).apply { setPadding(0, dp(8), 0, dp(12)) })
+                parent.addView(button("${getString(R.string.edit_saved_hotspot_prefix)}${storedSsid()}", false) {
+                    askClientNetworkCredentials { ssid, password ->
+                        saveHotspotCredentials(ssid, password)
+                        applyWirelessLink(WirelessHotspotMode.CLIENT)
+                    }
+                }, matchButton(12, 60))
+                parent.addView(label(getString(R.string.client_network_saved), 15, MUTED).apply { setPadding(0, dp(12), 0, 0) })
+            }
+            WirelessHotspotMode.MANUAL -> {
+                parent.addView(label(getString(R.string.hotspot_setup), 22, TEXT, true))
+                parent.addView(label(getString(R.string.s_1_open_car_hotspot_settings_turn_the_hotspot_on_and_sele), 16, MUTED).apply { setPadding(0, dp(8), 0, dp(12)) })
+                parent.addView(button(getString(R.string.open_car_hotspot_settings), false) { openCarWifiSettings() }, matchButton(0, 60))
+                parent.addView(button(if (pendingCarHotspotSetup) getString(R.string.save_hotspot_details_and_use_this_mode) else "${getString(R.string.edit_saved_hotspot_prefix)}${storedSsid()}", false) {
+                    askHotspotCredentials { ssid, password ->
+                        saveHotspotCredentials(ssid, password)
+                        pendingCarHotspotSetup = false
+                        applyWirelessLink(WirelessHotspotMode.MANUAL)
+                    }
+                }, matchButton(12, 60))
+                parent.addView(label(if (pendingCarHotspotSetup) getString(R.string.finish_setup_save_your_hotspot_details_to_use_this_mode) else if (carHotspotOff()) getString(R.string.hotspot_details_off) else getString(R.string.hotspot_details_saved), 15, if (carHotspotOff()) WARNING else MUTED).apply { setPadding(0, dp(12), 0, 0) })
+            }
+            else -> {
+                parent.addView(label(getString(R.string.turn_the_car_s_wi_fi_switch_on_allow_location_nearby_devic), 16, MUTED))
+                parent.addView(button(getString(R.string.open_car_wi_fi_settings), false) { openCarClientWifiSettings() }, matchButton(12, 60))
+            }
         }
     }
 
@@ -559,9 +574,20 @@ class PeugeotPlayActivity : ComponentActivity() {
         AirPlayPersistence.saveManualHotspotChannel(this, 0)
     }
 
-    private fun askHotspotCredentials(done: (String, String) -> Unit) {
+    private fun askClientNetworkCredentials(done: (String, String) -> Unit) =
+        askHotspotCredentials(
+            dialogTitle = getString(R.string.client_network_details),
+            dialogHint = getString(R.string.client_network_hint),
+            done = done,
+        )
+
+    private fun askHotspotCredentials(
+        dialogTitle: String = getString(R.string.car_hotspot_details),
+        dialogHint: String = getString(R.string.copy_these_from_the_car_s_hotspot_settings_use_5_ghz_if_av),
+        done: (String, String) -> Unit,
+    ) {
         val fields = column().apply { setPadding(dp(24), dp(12), dp(24), dp(12)) }
-        fields.addView(label(getString(R.string.copy_these_from_the_car_s_hotspot_settings_use_5_ghz_if_av), 16, MUTED))
+        fields.addView(label(dialogHint, 16, MUTED))
         val ssid = EditText(this).apply { hint = getString(R.string.hotspot_name); setText(storedSsid()); setSingleLine() }
         val password = EditText(this).apply {
             hint = getString(R.string.hotspot_password); setText(storedPassword()); setSingleLine()
@@ -592,7 +618,7 @@ class PeugeotPlayActivity : ComponentActivity() {
         val error = label("", 14, WARNING)
         error.accessibilityLiveRegion = View.ACCESSIBILITY_LIVE_REGION_POLITE
         fields.addView(error)
-        val dialog = AlertDialog.Builder(this).setTitle(getString(R.string.car_hotspot_details))
+        val dialog = AlertDialog.Builder(this).setTitle(dialogTitle)
             .setView(ScrollView(this).apply { addView(fields) })
             .setPositiveButton(getString(R.string.save_details), null).setNegativeButton(getString(R.string.cancel)) { _, _ -> hideKeyboard() }
             .setNeutralButton(getString(R.string.hide_keyboard), null).create()
@@ -891,7 +917,7 @@ class PeugeotPlayActivity : ComponentActivity() {
         Thread({
             val result = runCatching {
                 val report = buildString {
-                    appendLine("PeugeotPlay ${version()} · private beta diagnostic report")
+                    appendLine("PSA Play ${version()} · private beta diagnostic report")
                     appendLine("Android ${Build.VERSION.RELEASE} / API ${Build.VERSION.SDK_INT}")
                     appendLine("Head unit: ${Build.MANUFACTURER} ${Build.MODEL}")
                     appendLine("Connection: ${if (AirPlayPersistence.loadWirelessEnabled(appContext)) "wireless" else "USB"}")

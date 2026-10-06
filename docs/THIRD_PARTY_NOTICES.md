@@ -2,7 +2,7 @@
 
 ## Receiver
 
-PeugeotPlay is a modified version of [DiPlay by shihabal3amri](https://github.com/shihabal3amri/DiPlay) (v0.2.7, the Chinese build lineage of [xcertplay by shilapi](https://github.com/shilapi/xcertplay)). The upstream receiver is licensed under GNU GPL version 3; the full text is in `LICENSE` and the original README is retained in `docs/UPSTREAM-README.md`.
+PeugeotPlay is a modified version of [DiPlay by shihabal3amri](https://github.com/shihabal3amri/DiPlay) (v0.2.7, the Chinese build lineage of [xcertplay by shilapi](https://github.com/shilapi/xcertplay)), further developed from the [DiPlay-CN fork by serein-morii](https://github.com/serein-morii/DiPlay-CN). The upstream receiver is licensed under GNU GPL version 3; the full text is in `LICENSE` and the original README is retained in `docs/UPSTREAM-README.md`.
 
 Upstream credits [LIVI](https://github.com/f-io/LIVI) and [Showcase](https://github.com/amineross/showcase) for protocol research. Existing source comments and attribution are preserved.
 
@@ -17,6 +17,10 @@ The unmodified icon was obtained from Apple's developer site at:
 https://developer.apple.com/assets/elements/icons/carplay/carplay-96x96_2x.png
 
 CarPlay and the CarPlay icon are Apple Inc. marks/assets. This asset is not covered by the project's open-source code license. Its use here does not imply Apple approval or certification.
+
+## PSA / Peugeot marks
+
+The redrawn application icon combines the project's CarPlay-style mark with the letters "PSA", and the in-CarPlay "back to car" tile uses a stylized lion-in-shield device inspired by Peugeot's visual identity. PEUGEOT, the lion logo and PSA are trademarks of their respective owners (Stellantis group companies). They appear here nominally for identification and personalization only. This project is not affiliated with, sponsored or endorsed by BYD, PSA, Peugeot or Stellantis, and is provided for learning and exchange purposes only.
 
 ## Runtime dependencies
 

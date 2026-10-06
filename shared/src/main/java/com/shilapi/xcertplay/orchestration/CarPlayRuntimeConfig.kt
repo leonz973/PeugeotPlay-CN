@@ -21,6 +21,9 @@ enum class WirelessHotspotMode {
     WIFI_P2P,
     LOCAL_ONLY_HOTSPOT,
     MANUAL,
+
+    /** The head unit joins an existing network (phone hotspot or LAN router) as a station. */
+    CLIENT,
 }
 
 enum class ManualHotspotBand {
@@ -93,7 +96,9 @@ class CarPlayRuntimeConfig(
         require(remoteMfiToken?.contains('\u0000') != true) {
             "Remote MFi token must not contain U+0000"
         }
-        if (wirelessHotspotMode == WirelessHotspotMode.MANUAL) {
+        if (wirelessHotspotMode == WirelessHotspotMode.MANUAL ||
+            wirelessHotspotMode == WirelessHotspotMode.CLIENT
+        ) {
             val ssid = manualHotspotSsid
             require(!ssid.isNullOrBlank()) {
                 "manualHotspotSsid is required in manual hotspot mode"

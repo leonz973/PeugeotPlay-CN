@@ -34,6 +34,7 @@ import com.shilapi.xcertplay.mfi.MfiAuthenticationClient
 import com.shilapi.xcertplay.mfi.RemoteMfiAuthenticationClient
 import com.shilapi.xcertplay.mfi.LocalMfiAuthenticationClient
 import com.shilapi.xcertplay.network.CarPlayBonjour
+import com.shilapi.xcertplay.network.ClientNetworkManager
 import com.shilapi.xcertplay.network.diagnosticSummary
 import com.shilapi.xcertplay.network.CarPlayVpnService
 import com.shilapi.xcertplay.network.LocalOnlyHotspotManager
@@ -1615,6 +1616,13 @@ class CarPlayController(
                 band = config.manualHotspotBand,
                 channel = config.manualHotspotChannel,
                 security = config.manualHotspotSecurity,
+                onDiagnostic = ::debugLog,
+            )
+            WirelessHotspotMode.CLIENT -> ClientNetworkManager(
+                context = appContext,
+                ssid = config.manualHotspotSsid
+                    ?: throw IOException("Client network SSID is not configured"),
+                passphrase = config.manualHotspotPassphrase.orEmpty(),
                 onDiagnostic = ::debugLog,
             )
         }

@@ -44,7 +44,7 @@
     "source": "Source code",
     "feedback": "Report an issue",
     "privacy": "Privacy",
-    "footer": "Independent project based on xcertplay, with interface design from DiAuto. Not affiliated with Apple or BYD. CarPlay and its icon belong to Apple Inc.",
+    "footer": "Independent project based on xcertplay, with interface design from DiAuto. Not affiliated with Apple, BYD, PSA or Peugeot. CarPlay and its icon belong to Apple Inc. For learning and exchange purposes only.",
     "supportScope": "These projects focus on BYD cars. They may work on other brands, but other brands are unsupported and there are no plans to add support or fix brand-specific incompatibilities."
   },
   "ar": {
@@ -92,7 +92,7 @@
     "source": "الكود المصدري",
     "feedback": "الإبلاغ عن مشكلة",
     "privacy": "الخصوصية",
-    "footer": "مشروع مستقل مبني على xcertplay وبتصميم واجهة من DiAuto. غير تابع لـ Apple أو BYD. كار بلاي وأيقونته ملك لشركة Apple.",
+    "footer": "مشروع مستقل مبني على xcertplay وبتصميم واجهة من DiAuto. غير تابع لـ Apple أو BYD أو PSA أو بيجو. كار بلاي وأيقونته ملك لشركة Apple. لأغراض التعلم والتبادل فقط.",
     "supportScope": "يركز هذان المشروعان على سيارات BYD. قد يعملان على علامات أخرى، لكنها غير مدعومة، ولا توجد خطط لإضافة دعم لها أو إصلاح مشكلات التوافق الخاصة بها."
   },
   "ru": {
@@ -140,7 +140,7 @@
     "source": "Исходный код",
     "feedback": "Сообщить о проблеме",
     "privacy": "Конфиденциальность",
-    "footer": "Независимый проект на базе xcertplay с дизайном интерфейса DiAuto. Не связан с Apple или BYD. CarPlay и его значок принадлежат Apple Inc.",
+    "footer": "Независимый проект на базе xcertplay с дизайном интерфейса DiAuto. Не связан с Apple, BYD, PSA или Peugeot. CarPlay и его значок принадлежат Apple Inc. Только для обучения и обмена.",
     "supportScope": "Эти проекты ориентированы на автомобили BYD. На других марках они могут работать, но другие марки не поддерживаются; добавление поддержки и исправление несовместимости с ними не планируются."
   },
   "es": {
@@ -188,7 +188,7 @@
     "source": "Código fuente",
     "feedback": "Informar de un problema",
     "privacy": "Privacidad",
-    "footer": "Proyecto independiente basado en xcertplay, con diseño de interfaz de DiAuto. Sin afiliación a Apple ni BYD. CarPlay y su icono pertenecen a Apple Inc.",
+    "footer": "Proyecto independiente basado en xcertplay, con diseño de interfaz de DiAuto. Sin afiliación a Apple, BYD, PSA ni Peugeot. CarPlay y su icono pertenecen a Apple Inc. Solo para aprendizaje e intercambio.",
     "supportScope": "Estos proyectos se centran en coches BYD. Pueden funcionar en otras marcas, pero no se ofrece soporte para ellas ni hay planes de añadirlo o corregir incompatibilidades específicas."
   },
   "zh-Hans": {
@@ -236,7 +236,7 @@
     "source": "源代码",
     "feedback": "报告问题",
     "privacy": "隐私",
-    "footer": "基于 xcertplay 的独立项目，界面设计源自 DiAuto。与 Apple 或比亚迪无隶属关系。CarPlay 及其图标归 Apple Inc. 所有。",
+    "footer": "基于 xcertplay 的独立项目，界面设计源自 DiAuto。与 Apple、比亚迪、PSA 及标致均无隶属关系，仅供学习交流使用。CarPlay 及其图标归 Apple Inc. 所有。",
     "supportScope": "这些项目专注于比亚迪汽车。它们可能在其他品牌上运行，但其他品牌不在支持范围内，也没有增加支持或修复其品牌特定兼容性问题的计划。"
   }
 }

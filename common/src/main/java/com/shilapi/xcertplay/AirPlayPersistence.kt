@@ -77,7 +77,8 @@ object AirPlayPersistence {
 
     const val DEFAULT_MANUFACTURER = "PeugeotPlay"
     const val DEFAULT_MODEL = "PeugeotPlay"
-    const val DEFAULT_OEM_LABEL = "BYD"
+    const val DEFAULT_OEM_LABEL = "标致"
+    private val LEGACY_OEM_LABELS = setOf("BYD", "Peugeot")
     const val DEFAULT_MFI_I2C_PATH = "/dev/i2c-1"
 
     fun loadDisplayScaleTenths(context: Context): Int {
@@ -335,11 +336,14 @@ object AirPlayPersistence {
             .apply()
     }
 
-    fun loadOemLabel(context: Context): String =
-        context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
+    fun loadOemLabel(context: Context): String {
+        val stored = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
             .getString(KEY_OEM_LABEL, DEFAULT_OEM_LABEL)
             // iOS hides the car icon without a label.
             .orEmpty().ifBlank { DEFAULT_OEM_LABEL }
+        // Rename legacy defaults so existing installs pick up the new car label.
+        return if (stored in LEGACY_OEM_LABELS) DEFAULT_OEM_LABEL else stored
+    }
 
     fun saveOemLabel(context: Context, oemLabel: String) {
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).edit()

@@ -1,6 +1,6 @@
 # PeugeotPlay CN
 
-> 简体中文说明见 [README.zh-CN.md](README.zh-CN.md)。本仓库基于上游 DiPlay `v0.2.7`。
+> 简体中文说明见 [README.zh-CN.md](README.zh-CN.md)。本仓库基于上游 DiPlay `v0.2.7`，并经 [DiPlay-CN](https://github.com/serein-morii/DiPlay-CN) 二次开发。
 
 **CarPlay for compatible BYD Android head units.** Wired and wireless, with the familiar DiAuto interface. Independent app: `com.peugeotplay.cn`.
 
@@ -49,7 +49,7 @@ The website is available in English, Arabic, Russian, Spanish and Simplified Chi
 
 ## Source and credits
 
-Based on [xcertplay](https://github.com/shilapi/xcertplay), GPL-3.0, via the [DiPlay](https://github.com/shihabal3amri/DiPlay) v0.2.7 codebase. The home/settings UI and website adapt [DiAuto](https://github.com/shihabal3amri/DiAuto), AGPL-3.0; that license is included in `docs/licenses`. Preserve those notices when distributing modifications. CarPlay and its icon belong to Apple Inc.; no Apple or BYD affiliation or endorsement is implied.
+Based on [xcertplay](https://github.com/shilapi/xcertplay), GPL-3.0, via the [DiPlay](https://github.com/shihabal3amri/DiPlay) v0.2.7 codebase and the [DiPlay-CN](https://github.com/serein-morii/DiPlay-CN) fork. The home/settings UI and website adapt [DiAuto](https://github.com/shihabal3amri/DiAuto), AGPL-3.0; that license is included in `docs/licenses`. Preserve those notices when distributing modifications. CarPlay and its icon belong to Apple Inc.; PEUGEOT, the Peugeot lion shield and PSA belong to their respective owners. No Apple, BYD, PSA or Peugeot affiliation or endorsement is implied. This project is provided for learning and exchange purposes only.
 
 This repository starts with a clean public source snapshot. Local research, tester reports and release-signing secrets are excluded. The complete source corresponding to the APK is provided with every release; experimental runtime identity assets are described separately in the build instructions and notices.
 

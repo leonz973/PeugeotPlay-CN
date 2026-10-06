@@ -132,7 +132,7 @@ class CarPlayHostActivity : ComponentActivity() {
         remoteMfiServer = remoteMfiServer.trim().takeIf { it.isNotEmpty() },
         remoteMfiToken = remoteMfiToken.takeIf { it.isNotEmpty() },
         identification = Iap2IdentificationConfig(
-            name = "PeugeotPlay",
+            name = "PSA Play",
             modelIdentifier = normalizedModel(),
             manufacturer = normalizedManufacturer(),
             serialNumber = "PEUGEOTPLAY-" + PeugeotPlayBootstrap.deviceId(airPlayIdentity).replace(":", ""),
@@ -143,7 +143,7 @@ class CarPlayHostActivity : ComponentActivity() {
             vehicleStatusEnabled = com.shilapi.xcertplay.hud.BydOutputSettings.batteryToIphone(this),
             chargingConnectors = com.shilapi.xcertplay.hud.BydOutputSettings.chargingConnectors(this),
         ),
-        label = "PeugeotPlay",
+        label = "PSA Play",
         hostName = "peugeotplay-" + PeugeotPlayBootstrap.deviceId(airPlayIdentity).replace(":", "").lowercase(),
         hostMac = PeugeotPlayBootstrap.deviceId(airPlayIdentity).split(":").map { it.toInt(16).toByte() }.toByteArray(),
         wirelessBluetoothDeviceAddress = PeugeotPlayPreferences.phoneAddress(this),
@@ -258,6 +258,8 @@ class CarPlayHostActivity : ComponentActivity() {
     private var hotspotStatusView: TextView? = null
     private var manualHotspotFields: View? = null
     private var manualHotspotErrorView: TextView? = null
+    private var clientNetworkFields: View? = null
+    private var clientNetworkErrorView: TextView? = null
     private var iconPreviewView: ImageView? = null
     private var iconStatusView: TextView? = null
     private var safeAreaSummaryView: TextView? = null
@@ -2297,6 +2299,7 @@ class CarPlayHostActivity : ComponentActivity() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 add(WirelessHotspotMode.WIFI_P2P to getString(R.string.wi_fi_p2p_5_ghz))
             }
+            add(WirelessHotspotMode.CLIENT to getString(R.string.client_network))
             add(WirelessHotspotMode.MANUAL to getString(R.string.built_in_car_hotspot))
         }
         var selectedId = View.NO_ID
@@ -2448,14 +2451,65 @@ class CarPlayHostActivity : ComponentActivity() {
         )
         manualHotspotFields = manualFields
         manualHotspotErrorView = error
+
+        val clientFields = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+        }
+        clientFields.addView(
+            settingsInputRow(getString(R.string.network_name), manualHotspotSsid) { value ->
+                manualHotspotSsid = value
+                clientNetworkErrorView?.visibility = View.GONE
+            },
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ),
+        )
+        clientFields.addView(
+            settingsInputRow(
+                label = getString(R.string.network_password),
+                value = manualHotspotPassphrase,
+                password = true,
+            ) { value ->
+                manualHotspotPassphrase = value
+                clientNetworkErrorView?.visibility = View.GONE
+            },
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ).apply { topMargin = dp(10) },
+        )
+        val clientError = menuText("", 14f, Color.rgb(0xff, 0x7a, 0x7a)).apply {
+            visibility = View.GONE
+        }
+        clientFields.addView(
+            clientError,
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ).apply { topMargin = dp(8) },
+        )
+        section.addView(
+            clientFields,
+            LinearLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+            ).apply { topMargin = dp(8) },
+        )
+        clientNetworkFields = clientFields
+        clientNetworkErrorView = clientError
+
         updateManualHotspotFields()
         return section
     }
 
     private fun updateManualHotspotFields() {
-        val visible = wirelessHotspotMode == WirelessHotspotMode.MANUAL
-        manualHotspotFields?.visibility = if (visible) View.VISIBLE else View.GONE
-        if (!visible) manualHotspotErrorView?.visibility = View.GONE
+        val manual = wirelessHotspotMode == WirelessHotspotMode.MANUAL
+        val client = wirelessHotspotMode == WirelessHotspotMode.CLIENT
+        manualHotspotFields?.visibility = if (manual) View.VISIBLE else View.GONE
+        clientNetworkFields?.visibility = if (client) View.VISIBLE else View.GONE
+        if (!manual) manualHotspotErrorView?.visibility = View.GONE
+        if (!client) clientNetworkErrorView?.visibility = View.GONE
     }
 
     private fun validateMfiSettings(): Boolean {
@@ -2479,6 +2533,24 @@ class CarPlayHostActivity : ComponentActivity() {
     }
 
     private fun validateManualHotspotSettings(): Boolean {
+        if (wirelessHotspotMode == WirelessHotspotMode.CLIENT) {
+            val clientError = when {
+                manualHotspotSsid.isBlank() -> getString(R.string.hotspot_ssid_is_required)
+                manualHotspotSsid.encodeToByteArray().size > 32 ->
+                    getString(R.string.hotspot_ssid_must_be_at_most_32_utf_8_bytes)
+                '\u0000' in manualHotspotSsid -> getString(R.string.hotspot_ssid_contains_u_0000)
+                '\u0000' in manualHotspotPassphrase ->
+                    getString(R.string.hotspot_password_contains_u_0000)
+                manualHotspotPassphrase.isNotEmpty() &&
+                    manualHotspotPassphrase.length !in 8..63 ->
+                    getString(R.string.wpa2_wpa3_password_must_be_8_63_characters)
+                else -> null
+            }
+            clientNetworkErrorView?.text = clientError.orEmpty()
+            clientNetworkErrorView?.visibility =
+                if (clientError == null) View.GONE else View.VISIBLE
+            return clientError == null
+        }
         if (wirelessHotspotMode != WirelessHotspotMode.MANUAL) return true
         val error = when {
             manualHotspotSsid.isBlank() -> getString(R.string.hotspot_ssid_is_required)
@@ -2507,6 +2579,7 @@ class CarPlayHostActivity : ComponentActivity() {
         WirelessHotspotMode.WIFI_P2P -> getString(R.string.wi_fi_p2p_5_ghz)
         WirelessHotspotMode.LOCAL_ONLY_HOTSPOT -> getString(R.string.localonlyhotspot)
         WirelessHotspotMode.MANUAL -> getString(R.string.manual_hotspot)
+        WirelessHotspotMode.CLIENT -> getString(R.string.client_network)
     }
 
     private fun menuText(
@@ -2780,7 +2853,7 @@ class CarPlayHostActivity : ComponentActivity() {
         appendLog(support.details)
         appendLog(effectiveSummary)
         return AirPlayConfig(
-            deviceName = "PeugeotPlay",
+            deviceName = "PSA Play",
             deviceId = PeugeotPlayBootstrap.deviceId(airPlayIdentity),
             btMac = PeugeotPlayBluetooth.localAddress(this) ?: PeugeotPlayBootstrap.deviceId(airPlayIdentity),
             sourceVersion = "950.7.1",
@@ -3063,7 +3136,7 @@ class CarPlayHostActivity : ComponentActivity() {
         sink = snapshot.sink
         CarPlayBackgroundSession.store(snapshot.controller, snapshot.sink, snapshot.width, snapshot.height, this) { completion ->
             runOnUiThread {
-                shutdown(false, "PeugeotPlay disconnect", completion)
+                shutdown(false, "PSA Play disconnect", completion)
                 finish()
             }
         }
@@ -3168,7 +3241,7 @@ class CarPlayHostActivity : ComponentActivity() {
         CarPlayMediaKeys.attach(this, next)
         CarPlayBackgroundSession.store(next, renderer, size.width, size.height, this) { completion ->
             runOnUiThread {
-                shutdown(terminateProcess = false, reason = "PeugeotPlay disconnect", completion = completion)
+                shutdown(terminateProcess = false, reason = "PSA Play disconnect", completion = completion)
                 finish()
             }
         }
@@ -3556,7 +3629,7 @@ class CarPlayHostActivity : ComponentActivity() {
         val activeLog = SessionLogFile(logFile)
         runCatching {
             activeLog.reset(
-                "PeugeotPlay log started " +
+                "PSA Play log started " +
                     "${SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.US).format(Date())} " +
                     "pid=${Process.myPid()} path=${logFile.absolutePath}",
             )
