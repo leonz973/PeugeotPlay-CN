@@ -1,3 +1,11 @@
+# PSA Play 0.2.8 — 2026-10-06
+
+- New client network mode: the head unit joins an existing Wi-Fi network (phone hotspot or LAN) as a station, so the iPhone and the car share one network. Available on Android 9 alongside the built-in car hotspot; adds interface, credential fields and connection diagnostics.
+- Prefer DHCP IPv4 on the manual hotspot link so the iPhone can discover AirPlay over mDNS.
+- Rebrand to PSA Play: new launcher icon (lion shield with the phone-to-car mark) and a Peugeot shield tile for the CarPlay app list, with the car label now “标致” (migrates from BYD/Peugeot).
+- App UI, notifications, accessory identity and diagnostics renamed to PSA Play across all five languages.
+- Credits now name the full lineage (xcertplay → DiPlay v0.2.7 → DiPlay-CN) and the disclaimer covers Apple, BYD, PSA and Peugeot: no affiliation, for learning and exchange only.
+
 # PeugeotPlay 0.2.7 — 2026-09-29
 
 - App interface in English, Simplified Chinese, Arabic, Russian and Spanish; synchronized Android app-language settings.
