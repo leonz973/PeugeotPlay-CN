@@ -1,0 +1,111 @@
+Sun Oct 11 04:23:18 UTC 2026
+--- compile/lint errors ---
+274:FAILURE: Build completed with 2 failures.
+275-
+276-1: Task failed with an exception.
+277------------
+278:* What went wrong:
+279-Execution failed for task ':shared:testDebugUnitTest'.
+280-> There were failing tests. See the report at: file:///home/runner/work/PeugeotPlay-CN/PeugeotPlay-CN/shared/build/reports/tests/testDebugUnitTest/index.html
+281-
+282-* Try:
+--
+430:* What went wrong:
+431-Execution failed for task ':common:testDebugUnitTest'.
+432-> There were failing tests. See the report at: file:///home/runner/work/PeugeotPlay-CN/PeugeotPlay-CN/common/build/reports/tests/testDebugUnitTest/index.html
+433-
+434-* Try:
+--- log tail ---
+	at org.gradle.internal.execution.steps.CancelExecutionStep.execute(CancelExecutionStep.java:42)
+	at org.gradle.internal.execution.steps.TimeoutStep.executeWithoutTimeout(TimeoutStep.java:75)
+	at org.gradle.internal.execution.steps.TimeoutStep.execute(TimeoutStep.java:55)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:51)
+	at org.gradle.internal.execution.steps.PreCreateOutputParentsStep.execute(PreCreateOutputParentsStep.java:29)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.executeMutable(RemovePreviousOutputsStep.java:67)
+	at org.gradle.internal.execution.steps.RemovePreviousOutputsStep.executeMutable(RemovePreviousOutputsStep.java:39)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:42)
+	at org.gradle.internal.execution.steps.BroadcastChangingOutputsStep.execute(BroadcastChangingOutputsStep.java:24)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:69)
+	at org.gradle.internal.execution.steps.CaptureOutputsAfterExecutionStep.execute(CaptureOutputsAfterExecutionStep.java:46)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.executeMutable(ResolveInputChangesStep.java:39)
+	at org.gradle.internal.execution.steps.ResolveInputChangesStep.executeMutable(ResolveInputChangesStep.java:28)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.BuildCacheStep.executeWithoutCache(BuildCacheStep.java:189)
+	at org.gradle.internal.execution.steps.BuildCacheStep.lambda$execute$1(BuildCacheStep.java:76)
+	at org.gradle.internal.Either$Right.fold(Either.java:176)
+	at org.gradle.internal.execution.caching.CachingState.fold(CachingState.java:62)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:74)
+	at org.gradle.internal.execution.steps.BuildCacheStep.execute(BuildCacheStep.java:49)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.executeMutable(StoreExecutionStateStep.java:46)
+	at org.gradle.internal.execution.steps.StoreExecutionStateStep.executeMutable(StoreExecutionStateStep.java:35)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.executeBecause(SkipUpToDateStep.java:75)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.lambda$execute$2(SkipUpToDateStep.java:53)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:53)
+	at org.gradle.internal.execution.steps.SkipUpToDateStep.execute(SkipUpToDateStep.java:35)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:37)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsFinishedStep.execute(MarkSnapshottingInputsFinishedStep.java:27)
+	at org.gradle.internal.execution.steps.ResolveMutableCachingStateStep.executeDelegate(ResolveMutableCachingStateStep.java:70)
+	at org.gradle.internal.execution.steps.ResolveMutableCachingStateStep.executeDelegate(ResolveMutableCachingStateStep.java:32)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:69)
+	at org.gradle.internal.execution.steps.AbstractResolveCachingStateStep.execute(AbstractResolveCachingStateStep.java:37)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.executeMutable(ResolveChangesStep.java:63)
+	at org.gradle.internal.execution.steps.ResolveChangesStep.executeMutable(ResolveChangesStep.java:34)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.executeDelegate(ValidateStep.java:79)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.executeDelegate(ValidateStep.java:65)
+	at org.gradle.internal.execution.steps.ValidateStep.execute(ValidateStep.java:99)
+	at org.gradle.internal.execution.steps.ValidateStep$Mutable.execute(ValidateStep.java:65)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.executeMutable(CaptureMutableStateBeforeExecutionStep.java:86)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.execute(CaptureMutableStateBeforeExecutionStep.java:65)
+	at org.gradle.internal.execution.steps.CaptureMutableStateBeforeExecutionStep.execute(CaptureMutableStateBeforeExecutionStep.java:45)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeWithNonEmptySources(SkipEmptyMutableWorkStep.java:210)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeMutable(SkipEmptyMutableWorkStep.java:90)
+	at org.gradle.internal.execution.steps.SkipEmptyMutableWorkStep.executeMutable(SkipEmptyMutableWorkStep.java:53)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.legacy.MarkSnapshottingInputsStartedStep.execute(MarkSnapshottingInputsStartedStep.java:38)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.executeMutable(LoadPreviousExecutionStateStep.java:36)
+	at org.gradle.internal.execution.steps.LoadPreviousExecutionStateStep.executeMutable(LoadPreviousExecutionStateStep.java:23)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.executeMutable(HandleStaleOutputsStep.java:77)
+	at org.gradle.internal.execution.steps.HandleStaleOutputsStep.executeMutable(HandleStaleOutputsStep.java:43)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.lambda$executeMutable$0(AssignMutableWorkspaceStep.java:34)
+	at org.gradle.api.internal.tasks.execution.TaskExecution$4.withWorkspace(TaskExecution.java:305)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.executeMutable(AssignMutableWorkspaceStep.java:30)
+	at org.gradle.internal.execution.steps.AssignMutableWorkspaceStep.executeMutable(AssignMutableWorkspaceStep.java:21)
+	at org.gradle.internal.execution.steps.MutableStep.execute(MutableStep.java:26)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:40)
+	at org.gradle.internal.execution.steps.ChoosePipelineStep.execute(ChoosePipelineStep.java:23)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.lambda$execute$2(ExecuteWorkBuildOperationFiringStep.java:67)
+	at java.base/java.util.Optional.orElseGet(Optional.java:364)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:67)
+	at org.gradle.internal.execution.steps.ExecuteWorkBuildOperationFiringStep.execute(ExecuteWorkBuildOperationFiringStep.java:39)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:46)
+	at org.gradle.internal.execution.steps.IdentityCacheStep.execute(IdentityCacheStep.java:34)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:56)
+	at org.gradle.internal.execution.steps.IdentifyStep.execute(IdentifyStep.java:38)
+	at org.gradle.internal.execution.impl.DefaultExecutionEngine$1.execute(DefaultExecutionEngine.java:68)
+	at org.gradle.api.internal.tasks.execution.ExecuteActionsTaskExecuter.executeIfValid(ExecuteActionsTaskExecuter.java:132)
+	... 33 more
+
+==============================================================================
+
+BUILD FAILED in 5m 54s
+189 actionable tasks: 32 executed, 157 up-to-date
+Configuration cache entry reused.
+--- failed tests ---
+./shared/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.hud.BydOptionalOutputSettingsTest.xml-4-  <testcase name="installedStockReceiverDoesNotEnableUnverifiedDilink4Hud" classname="com.shilapi.xcertplay.hud.BydOptionalOutputSettingsTest" time="5.051"/>
+./shared/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.hud.BydOptionalOutputSettingsTest.xml-5-  <testcase name="optionalOutputsDefaultOffAndKeepExplicitPreviousSelections" classname="com.shilapi.xcertplay.hud.BydOptionalOutputSettingsTest" time="0.413">
+./shared/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.hud.BydOptionalOutputSettingsTest.xml:6:    <failure message="java.lang.AssertionError: expected:&lt;PACKAGE&gt; but was:&lt;OFF&gt;" type="java.lang.AssertionError">java.lang.AssertionError: expected:&lt;PACKAGE&gt; but was:&lt;OFF&gt;
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-4-  <testcase name="oldPreferenceMigratesOnceAndCannotOverrideLaterSystemChanges" classname="com.shilapi.xcertplay.AppLocaleTest" time="6.347"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-5-  <testcase name="firstLaunchKeepsASupportedSystemLanguage" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.114"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-6-  <testcase name="explicitTraditionalScriptIsRecognizedWithoutATraditionalRegion" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.132"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-7-  <testcase name="existingSystemChoiceWinsOverLegacyPreference" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.086"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-8-  <testcase name="traditionalChineseUsesItsOwnLocaleOnAndroid13" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.069"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-9-  <testcase name="explicitSimplifiedScriptTakesPrecedenceOverTraditionalRegion" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.107"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-10-  <testcase name="pickerAndSystemSettingsShareTheSamePreference" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.082"/>
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml-11-  <testcase name="legacyTraditionalChoiceMigratesOnceWithoutOverridingSystemChoice" classname="com.shilapi.xcertplay.AppLocaleTest" time="0.132">
+./common/build/test-results/testDebugUnitTest/TEST-com.shilapi.xcertplay.AppLocaleTest.xml:12:    <failure message="org.junit.ComparisonFailure: expected:&lt;[zh-TW]&gt; but was:&lt;[]&gt;" type="org.junit.ComparisonFailure">org.junit.ComparisonFailure: expected:&lt;[zh-TW]&gt; but was:&lt;[]&gt;
