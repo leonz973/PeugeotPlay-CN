@@ -24,6 +24,19 @@ class BydHudRouteStateTest {
     }
 
     @Test
+    fun `lane update attaches arrows to the current maneuver`() {
+        val state = populatedState()
+        val change = state.accept(
+            BydHudRouteState.LANE_GUIDANCE_UPDATE,
+            tlvs(tlv(0x01, 1), tlv(0x03, 1, 1, 3)),
+        )
+        assertEquals(BydHudRouteChange.GUIDANCE, change)
+        val apple = state.currentApple()
+        assertEquals(listOf(1, 1, 3), apple?.lanes)
+        assertEquals(1, apple?.laneHighlight)
+    }
+
+    @Test
     fun `maps right-hand u-turn`() {
         val state = BydHudRouteState()
         state.accept(
@@ -43,6 +56,60 @@ class BydHudRouteStateTest {
         val state = populatedState()
 
         val change = state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x01, 2)))
+
+        assertEquals(BydHudRouteChange.CLEAR, change)
+        assertNull(state.current())
+    }
+
+    @Test
+    fun `overlay keeps the last instruction across a NoRouteSet handoff`() {
+        val state = populatedState(keepAcrossNoRoute = true)
+        val before = state.current()
+
+        val change = state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x01, 0)))
+
+        assertEquals(BydHudRouteChange.NONE, change)
+        assertEquals(before, state.current())
+    }
+
+    @Test
+    fun `overlay still clears on arrival even when NoRouteSet is ignored`() {
+        val state = populatedState(keepAcrossNoRoute = true)
+
+        val change = state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x01, 2)))
+
+        assertEquals(BydHudRouteChange.CLEAR, change)
+        assertNull(state.current())
+    }
+
+    @Test
+    fun `overlay treats NoRouteSet at the destination as the real end`() {
+        val state = BydHudRouteState(keepAcrossNoRoute = true)
+        state.accept(
+            BydHudRouteState.ROUTE_GUIDANCE_MANEUVER_UPDATE,
+            tlvs(tlv(0x01, 0, 1), tlv(0x03, 10), tlv(0x08, 0)),
+        )
+        state.accept(
+            BydHudRouteState.ROUTE_GUIDANCE_UPDATE,
+            tlvs(tlv(0x01, 1), tlv(0x0a, 0, 0, 0, 8), tlv(0x0d, 0, 1)),
+        )
+        assertEquals(8, state.current()!!.distanceMeters)
+
+        val change = state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x01, 0)))
+
+        assertEquals(BydHudRouteChange.CLEAR, change)
+        assertNull(state.current())
+    }
+
+    @Test
+    fun `overlay treats NoRouteSet at remaining zero as the real end`() {
+        val state = populatedState(keepAcrossNoRoute = true)
+        state.accept(
+            BydHudRouteState.ROUTE_GUIDANCE_UPDATE,
+            tlvs(tlv(0x01, 1), tlv(0x07, 0, 0, 0, 0, 0, 0, 0, 0), tlv(0x0d, 0, 1)),
+        )
+
+        val change = state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x01, 0)))
 
         assertEquals(BydHudRouteChange.CLEAR, change)
         assertNull(state.current())
@@ -87,7 +154,7 @@ class BydHudRouteStateTest {
     @Test
     fun `brief empty maneuver list keeps guidance and a lasting one hides it without losing maneuvers`() {
         var now = 0L
-        val state = populatedState { now }
+        val state = populatedState(nanoTime = { now })
 
         assertEquals(BydHudRouteChange.NONE, state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x01, 5), tlv(0x0d))))
         now = 2_000_000_000L
@@ -128,7 +195,7 @@ class BydHudRouteStateTest {
     @Test
     fun `silent route expires and fresh update restores cached maneuver`() {
         var now = 0L
-        val state = populatedState { now }
+        val state = populatedState(nanoTime = { now })
         now = 30_000_000_000L
         assertNull(state.current())
         state.accept(BydHudRouteState.ROUTE_GUIDANCE_UPDATE, tlvs(tlv(0x0a, 0, 0, 0, 20)))
@@ -146,8 +213,11 @@ class BydHudRouteStateTest {
     private fun utf8z(value: String): IntArray =
         (value.toByteArray(Charsets.UTF_8).map { it.toInt() and 0xff } + 0).toIntArray()
 
-    private fun populatedState(nanoTime: () -> Long = System::nanoTime): BydHudRouteState =
-        BydHudRouteState(nanoTime).also { state ->
+    private fun populatedState(
+        nanoTime: () -> Long = System::nanoTime,
+        keepAcrossNoRoute: Boolean = false,
+    ): BydHudRouteState =
+        BydHudRouteState(nanoTime, keepAcrossNoRoute = keepAcrossNoRoute).also { state ->
         state.accept(
             BydHudRouteState.ROUTE_GUIDANCE_MANEUVER_UPDATE,
             tlvs(tlv(0x01, 0, 1), tlv(0x03, 2), tlv(0x08, 0)),

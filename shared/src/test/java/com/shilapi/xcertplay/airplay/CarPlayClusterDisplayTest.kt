@@ -51,20 +51,26 @@ class CarPlayClusterDisplayTest {
         val card = CarPlayClusterDisplay.config(1920, 720, content = CarPlayClusterDisplay.Content.TURN_CARD)
 
         assertEquals("maps:/car/instrumentcluster/instructioncard", card.initialUrl)
-        // The three contents the iPhone lists in altScreenURLs.
+        val custom = CarPlayClusterDisplay.config(1920, 720, content = CarPlayClusterDisplay.Content.MAP_WITH_CUSTOM_CARD)
+        assertEquals("maps:/car/instrumentcluster/map", custom.initialUrl)
         assertEquals(
-            listOf("maps:/car/instrumentcluster/map", "maps:/car/instrumentcluster/instructioncard", "maps:/car/instrumentcluster"),
+            listOf(
+                "maps:/car/instrumentcluster/map",
+                "maps:/car/instrumentcluster/instructioncard",
+                "maps:/car/instrumentcluster",
+                "maps:/car/instrumentcluster/map",
+            ),
             CarPlayClusterDisplay.Content.entries.map { it.url },
         )
     }
 
     @Test
     fun scaledStreamsKeepThePanelAspect() {
-        val sizes = (CarPlayClusterDisplay.scalePresets + 50).map {
+        val sizes = CarPlayClusterDisplay.scalePresets.map {
             CarPlayClusterDisplay.config(1920, 720, scalePercent = it).let { c -> c.widthPixels to c.heightPixels }
         }
 
-        assertEquals(listOf(1920 to 720, 1600 to 600, 1280 to 480, 960 to 360), sizes)
+        assertEquals(listOf(1920 to 720, 1600 to 600, 1280 to 480, 2408 to 904), sizes)
         assertTrue(CarPlayClusterDisplay.STREAM_SCALE_PERCENT in CarPlayClusterDisplay.scalePresets)
     }
 
@@ -89,6 +95,19 @@ class CarPlayClusterDisplayTest {
     }
 
     @Test
+    fun smallWindowMarkerPercentPlacesTheSafeAreaCentre() {
+        val area = CarPlayClusterDisplay.config(
+            1920, 720, scalePercent = 100, markerXPercent = 80, markerYPercent = 45,
+        ).safeArea!!
+
+        // The safe area stays centred on the requested 5 %-grid position.
+        val centreX = (area.left + (1920 - area.right)) / 2.0
+        val centreY = (area.top + (720 - area.bottom)) / 2.0
+        assertEquals(1920 * 0.80, centreX, 1.0)
+        assertEquals(720 * 0.45, centreY, 1.0)
+    }
+
+    @Test
     fun nearAnEdgeTheSafeAreaShrinksAroundTheMarker() {
         val top = CarPlayClusterDisplay.config(1000, 1000, scalePercent = 100, verticalStep = -3).safeArea!!
 
@@ -104,5 +123,20 @@ class CarPlayClusterDisplayTest {
         val centreX = (safe.left + 100 - safe.right) / 2.0
 
         assertTrue("centre x $centreX", centreX in 48.0..52.0)
+    }
+
+    @Test
+    fun virtualCluster16By9UsesBalancedSafeArea() {
+        val config = CarPlayClusterDisplay.config(
+            widthPixels = 1280,
+            heightPixels = 720,
+            scalePercent = 100,
+            baseSafeArea = CarPlayClusterDisplay.VIRTUAL_SAFE_AREA_PERCENT,
+        )
+        assertEquals(1280, config.widthPixels)
+        assertEquals(720, config.heightPixels)
+        val safe = config.safeArea!!
+        assertEquals(safe.left, safe.right)
+        assertEquals(safe.top, safe.bottom)
     }
 }

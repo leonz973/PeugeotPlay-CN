@@ -68,6 +68,7 @@ class IphoneUsbHost(
     private val usbManager: UsbManager,
     private val matcher: IphoneUsbMatcher,
     private val permissionAction: String = "${context.packageName}.IPHONE_USB_PERMISSION",
+    private val onDiagnostic: (String) -> Unit = {},
 ) {
     private val appContext = context.applicationContext
 
@@ -156,6 +157,9 @@ class IphoneUsbHost(
                     CONTROL_TRANSFER_TIMEOUT_MILLIS,
                 )
                 if (transferred != response.size) {
+                    // iOS 12 and 15 rejected this request even while unlocked (#509, #455); a locked
+                    // iPhone rejects it too (#100). Record what the iPhone exposes to tell them apart.
+                    runCatching { onDiagnostic(modeRejectionDiagnostic(connection, device)) }
                     throw IphoneUsbException.Protocol(
                         "CarPlay configuration request transferred $transferred of ${response.size} bytes",
                     )
@@ -255,14 +259,17 @@ class IphoneUsbHost(
                 ?: throw IphoneUsbException.Protocol("USBMUX interface exposes no bulk endpoint pair")
             Log.i(
                 IphoneCarPlayConfiguration.TAG,
-                "usbmux iface=${usbMux.id} alt=${usbMux.alternateSetting} " +
-                    "out=0x${endpoints.first.address.toString(16)} in=0x${endpoints.second.address.toString(16)}",
+                "usbmux config=${configuration.id} iface=${usbMux.id} alt=${usbMux.alternateSetting} " +
+                    "class=${usbMux.interfaceClass}/${usbMux.interfaceSubclass}/${usbMux.interfaceProtocol} " +
+                    "endpoints=${usbMux.endpointCount} " +
+                    "out=${describeUsbEndpoint(endpoints.first)} " +
+                    "in=${describeUsbEndpoint(endpoints.second)}",
             )
             if (!connection.claimInterface(usbMux, true)) {
                 throw IphoneUsbException.DeviceUnavailable("Android could not claim USBMUX interface 1")
             }
             claimedInterface = usbMux
-            return Iap2UsbSession(connection, endpoints.first, endpoints.second)
+            return Iap2UsbSession(connection, endpoints.first, endpoints.second, onDiagnostic)
         } catch (error: Throwable) {
             if (claimedInterface != null) connection.releaseInterface(claimedInterface)
             connection.close()
@@ -308,12 +315,31 @@ class IphoneUsbHost(
         getParcelableExtra(UsbManager.EXTRA_DEVICE)
     }
 
+    /** The iPhone's current USB mode (usbmuxd's 0x45 request) and every configuration it exposes. */
+    private fun modeRejectionDiagnostic(connection: UsbDeviceConnection, device: UsbDevice): String {
+        val mode = ByteArray(USB_MODE_RESPONSE_LENGTH)
+        val read = connection.controlTransfer(
+            USB_VENDOR_DEVICE_IN, GET_USB_MODE_REQUEST, 0, 0, mode, mode.size, CONTROL_TRANSFER_TIMEOUT_MILLIS,
+        )
+        return usbModeDiagnostic(read, mode, device.version,
+            (0 until device.configurationCount).map(device::getConfiguration).map { "${it.id}[${IphoneCarPlayConfiguration.describe(it)}]" })
+    }
+
     companion object {
         private const val USB_VENDOR_DEVICE_IN = 0xc0
+        private const val GET_USB_MODE_REQUEST = 0x45
+        private const val USB_MODE_RESPONSE_LENGTH = 4
         private const val CARPLAY_CONFIGURATION_REQUEST = 0x52
         private const val CARPLAY_CONFIGURATION_INDEX = 0x0004
         private const val VENDOR_RESPONSE_LENGTH = 1
         private const val CONTROL_TRANSFER_TIMEOUT_MILLIS = 1_000
+
+        /** usbmuxd reads 3:3:3:0 in the initial mode and 5:3:3:0 once a mode is set. */
+        internal fun usbModeDiagnostic(read: Int, mode: ByteArray, deviceVersion: String?, configurations: List<String>): String {
+            val current = if (read == mode.size) mode.joinToString(":") { (it.toInt() and 0xff).toString() } else "unreadable($read)"
+            return "CarPlay USB mode request rejected; current mode=$current " +
+                "usbVersion=${deviceVersion ?: "unknown"} configurations=$configurations"
+        }
     }
 
 }
@@ -327,6 +353,7 @@ class Iap2UsbSession internal constructor(
     private val connection: UsbDeviceConnection,
     private val outEndpoint: UsbEndpoint,
     private val inEndpoint: UsbEndpoint,
+    private val onDiagnostic: (String) -> Unit = {},
 ) : Closeable {
     private val stateLock = Any()
     private val readLock = Any()
@@ -334,6 +361,8 @@ class Iap2UsbSession internal constructor(
     private var closed = false
     private var failure: IphoneUsbException? = null
     private var pendingRead: UsbRequest? = null
+    private val readQueuePolicy = UsbReadQueuePolicy.forCurrentPlatform()
+    private val requests = UsbRequestQueue(connection, "usbmux-read-reaper")
 
     fun write(data: ByteArray, timeoutMillis: Int) = synchronized(writeLock) {
         checkOpen()
@@ -355,19 +384,33 @@ class Iap2UsbSession internal constructor(
         var initialized = false
         try {
             if (!request.initialize(connection, inEndpoint)) {
-                throw IphoneUsbException.DeviceUnavailable("Android could not initialize USBMUX read request")
+                throw IphoneUsbException.DeviceUnavailable(
+                    "Android could not initialize USBMUX read request (${requestDiagnostics(timeoutMillis)})",
+                )
             }
             initialized = true
-            synchronized(stateLock) {
+            val buffer = ByteBuffer.allocateDirect(USBMUX_READ_CHUNK_BYTES)
+            val queueResult = synchronized(stateLock) {
                 checkOpenLocked()
                 pendingRead = request
+                readQueuePolicy.queue(buffer, ::checkOpenLocked) { requests.queue(request, it) }
             }
-            val buffer = ByteBuffer.allocateDirect(USBMUX_READ_CHUNK_BYTES)
-            if (!request.queue(buffer)) {
-                throw IphoneUsbException.DeviceUnavailable("Android could not queue USBMUX read request")
+            if (!queueResult.queued) {
+                throw IphoneUsbException.DeviceUnavailable(
+                    "Android could not queue USBMUX read request (${requestDiagnostics(timeoutMillis)} " +
+                        "firstBytes=${queueResult.firstBytes} fallbackBytes=${queueResult.fallbackBytes ?: "not_attempted"})",
+                )
+            }
+            // The policy remembers an accepted fallback, so this event occurs once per pipe.
+            if (queueResult.fallbackBytes != null) runCatching {
+                onDiagnostic(
+                    "USBMUX read queue compatibility fallback api=${Build.VERSION.SDK_INT} " +
+                        "endpoint=${describeUsbEndpoint(inEndpoint)} firstBytes=${queueResult.firstBytes} " +
+                        "fallbackBytes=${queueResult.fallbackBytes}",
+                )
             }
             val completed = try {
-                connection.requestWait(timeoutMillis)
+                requests.await(timeoutMillis)
             } catch (_: TimeoutException) {
                 drainCancelledRead(request)
                 return@synchronized null
@@ -402,6 +445,7 @@ class Iap2UsbSession internal constructor(
             pendingRead
         }
         requestToCancel?.cancel()
+        requests.close()
         connection.close()
     }
 
@@ -419,7 +463,7 @@ class Iap2UsbSession internal constructor(
             throw failSession("Android could not cancel timed out USBMUX read request")
         }
         val completed = try {
-            connection.requestWait(CANCEL_DRAIN_TIMEOUT_MILLIS)
+            requests.await(CANCEL_DRAIN_TIMEOUT_MILLIS)
         } catch (_: TimeoutException) {
             throw failSession("Timed out draining cancelled USBMUX read request")
         }
@@ -436,11 +480,21 @@ class Iap2UsbSession internal constructor(
         return error
     }
 
+    private fun requestDiagnostics(timeoutMillis: Long): String = buildString {
+        append("api=").append(Build.VERSION.SDK_INT)
+        append(" endpoint=").append(describeUsbEndpoint(inEndpoint))
+        append(" timeoutMs=").append(timeoutMillis)
+    }
+
     private companion object {
         const val USBMUX_READ_CHUNK_BYTES = 65_536
         const val CANCEL_DRAIN_TIMEOUT_MILLIS = 1_000L
     }
 }
+
+internal fun describeUsbEndpoint(endpoint: UsbEndpoint): String =
+    "0x${endpoint.address.toString(16)}(direction=${endpoint.direction}," +
+        "type=${endpoint.type},maxPacket=${endpoint.maxPacketSize})"
 
 /** USB bring-up failures that precede iAP2 and are distinct from MFi I2C failures. */
 sealed class IphoneUsbException(message: String, cause: Throwable? = null) : IOException(message, cause) {

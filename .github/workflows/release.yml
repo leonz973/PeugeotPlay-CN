@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     env:
-      OFFICIAL_APK_URL: https://github.com/shihabal3amri/DiPlay/releases/download/v0.2.7/DiPlay-0.2.7.apk
-      OFFICIAL_APK_SHA256: 27b434462da7e78b1ff0987d129ed0a4b0a0e56beceaf8ec221d47150d4675bd
+      OFFICIAL_APK_URL: https://github.com/shihabal3amri/DiPlay/releases/download/v0.2.14/DiPlay-0.2.14.apk
+      OFFICIAL_APK_SHA256: 62b31f79db32bc7c85013ae830460b697a5952fad571ed0030b97341dde0b2e3
     steps:
       - uses: actions/checkout@v4
       - name: Reject credential files in public source
@@ -27,30 +27,41 @@ jobs:
         with:
           packages: platform-tools platforms;android-37.0 build-tools;36.0.0 ndk;28.2.13676358
       - uses: gradle/actions/setup-gradle@v4
-      - name: Provision runtime identity from official v0.2.7 APK
+      - name: Provision runtime identity from official v0.2.14 APK
         shell: bash
         run: |
           set -euo pipefail
-          apk="$RUNNER_TEMP/DiPlay-0.2.7.apk"
+          apk="$RUNNER_TEMP/DiPlay-0.2.14.apk"
           assets="$RUNNER_TEMP/auth-assets"
           curl -fsSL -o "$apk" "$OFFICIAL_APK_URL"
           python3 scripts/extract_official_identity.py "$apk" "$assets" "$OFFICIAL_APK_SHA256"
           echo "PEUGEOTPLAY_AUTH_ASSETS_DIR=$assets" >> "$GITHUB_ENV"
-      - name: Test and build standalone debug APK
-        run: ./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :mobile:lintDebug :mobile:assembleStandaloneDebug --stacktrace
+      - name: The release notes must use the version placeholder
+        run: grep -q '{{VERSION}}' docs/GITHUB_RELEASE.md
+      - name: The tag must match the app versionName
+        run: |
+          version=$(grep -o 'versionName = "[^"]*"' mobile/build.gradle.kts | cut -d'"' -f2)
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$version" != "$tag" ]; then
+            echo "::error::tag $GITHUB_REF_NAME does not match versionName $version"
+            exit 1
+          fi
+      - name: Test and build standalone release APK
+        run: ./gradlew :shared:testDebugUnitTest :common:testDebugUnitTest :mobile:lintRelease :mobile:assembleStandaloneRelease --stacktrace > gradle.log 2>&1 || { cat gradle.log | tail -120; exit 1; }
       - name: Verify identity is inside the APK and not in git
         run: |
           set -euo pipefail
           python3 scripts/check_public_tree.py
-          python3 scripts/verify_apk_identity.py mobile/build/outputs/apk/debug/mobile-debug.apk
+          python3 scripts/verify_apk_identity.py mobile/build/outputs/apk/release/mobile-release.apk
       - name: Prepare release files
         shell: bash
         run: |
           set -euo pipefail
           apk="PeugeotPlay-cn-${GITHUB_REF_NAME}.apk"
-          cp mobile/build/outputs/apk/debug/mobile-debug.apk "$apk"
+          cp mobile/build/outputs/apk/release/mobile-release.apk "$apk"
           sha256sum "$apk" > "$apk.sha256"
           cp docs/GITHUB_RELEASE.md release-notes.md
+          sed -i "s/{{VERSION}}/${GITHUB_REF_NAME#v}/g" release-notes.md
       - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
@@ -60,9 +71,9 @@ jobs:
           apk="PeugeotPlay-cn-${GITHUB_REF_NAME}.apk"
           gh release delete "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --yes || true
           gh release create "$GITHUB_REF_NAME" \
-            "$apk#PeugeotPlay CN" \
+            "$apk#PSA Play" \
             "$apk.sha256#SHA-256" \
             --repo "$GITHUB_REPOSITORY" \
             --verify-tag \
-            --title "PeugeotPlay CN 0.2.7" \
+            --title "PeugeotPlay CN ${GITHUB_REF_NAME#v}" \
             --notes-file release-notes.md

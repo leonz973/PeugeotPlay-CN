@@ -4,25 +4,26 @@ import java.net.Inet4Address
 import java.net.Inet6Address
 import java.net.InetAddress
 
-/**
- * Wi-Fi Direct keeps the scoped link-local path (it has no DHCP server). A manual
- * AP runs DHCP, and iPhones discover it primarily over IPv4 mDNS, so those callers
- * pass preferIpv4; JmDNS cannot answer queries when bound to an IPv6 link-local.
- */
-internal fun wirelessHostAddress(
-    addresses: List<InetAddress>,
-    interfaceIndex: Int,
-    preferIpv4: Boolean = false,
-): InetAddress? {
-    val usableIpv4 = addresses.firstOrNull {
+internal fun wirelessHostAddress(addresses: List<InetAddress>, interfaceIndex: Int): InetAddress? {
+    val selected = HotspotAddressPolicy.select(addresses) ?: return null
+    if (selected is Inet6Address && interfaceIndex > 0) {
+        return Inet6Address.getByAddress(null, selected.address, interfaceIndex)
+    }
+    return selected
+}
+
+/** Station LAN discovery must cover IPv4 multicast as well as scoped link-local IPv6. */
+internal fun existingWifiHostAddresses(addresses: List<InetAddress>, interfaceIndex: Int): List<InetAddress> {
+    val ipv4 = addresses.firstOrNull {
         it is Inet4Address && !it.isLoopbackAddress && !it.isLinkLocalAddress &&
             !it.isAnyLocalAddress && !it.isMulticastAddress
     }
-    if (preferIpv4) usableIpv4?.let { return it }
-    if (interfaceIndex > 0) {
+    val ipv6 = if (interfaceIndex > 0) {
         addresses.filterIsInstance<Inet6Address>().firstOrNull { it.isLinkLocalAddress }?.let {
-            return Inet6Address.getByAddress(null, it.address, interfaceIndex)
+            Inet6Address.getByAddress(null, it.address, interfaceIndex)
         }
+    } else {
+        null
     }
-    return usableIpv4
+    return listOfNotNull(ipv4, ipv6)
 }

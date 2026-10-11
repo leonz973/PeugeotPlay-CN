@@ -74,7 +74,6 @@ class ClientNetworkManager(
                 wirelessHostAddress(
                     Collections.list(it.networkInterface.inetAddresses),
                     it.index,
-                    preferIpv4 = true,
                 )
             }
             if (localInterface != null && address is Inet4Address && match != false) {

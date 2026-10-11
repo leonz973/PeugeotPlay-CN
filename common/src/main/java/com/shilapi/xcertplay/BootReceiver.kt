@@ -9,9 +9,11 @@ import android.util.Log
 class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
-        if (!AirPlayPersistence.loadAutoStartOnBoot(context)) return
+        val launchEnabled = AirPlayPersistence.loadAutoStartOnBoot(context)
+        StartupDiagnosticSnapshot.received(context, launchEnabled)
+        if (!launchEnabled) return
 
-        val launch = Intent(context, PeugeotPlayActivity::class.java).apply {
+        val launch = Intent(context, DiPlayActivity::class.java).apply {
             addFlags(
                 Intent.FLAG_ACTIVITY_NEW_TASK or
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
@@ -20,8 +22,10 @@ class BootReceiver : BroadcastReceiver() {
         }
         try {
             context.startActivity(launch)
+            StartupDiagnosticSnapshot.launchResult(context)
         } catch (error: RuntimeException) {
-            Log.w(TAG, "Boot auto-start could not launch CarPlayHostActivity", error)
+            StartupDiagnosticSnapshot.launchResult(context, error)
+            Log.w(TAG, "Boot auto-start could not launch DiPlayActivity", error)
         }
     }
 

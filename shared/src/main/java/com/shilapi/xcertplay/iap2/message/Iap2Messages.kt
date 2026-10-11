@@ -33,7 +33,7 @@ data class Iap2WirelessSessionParameters(
 ) {
     init {
         require(ssid.isNotBlank()) { "wireless SSID must not be blank" }
-        require(passphrase.isNotBlank()) { "wireless passphrase must not be blank" }
+        require(securityType == 0 || passphrase.isNotEmpty()) { "secured wireless network requires a passphrase" }
         require(channel in 0..0xff) { "wireless channel must be in 0..255" }
         require(ipAddresses.isNotEmpty()) { "wireless IP address list must not be empty" }
         require(securityType in 0..0xff) { "wireless security type must be in 0..255" }
@@ -275,7 +275,7 @@ object Iap2ControlMessages {
         optionalVoid(5, maxNonSiphoningCurrentExceeded)
     }
 
-    fun subscriptions(): List<Iap2Frame> = listOf(
+    fun startNowPlayingUpdates(): Iap2Frame =
         Iap2Messages.build(Iap2Endpoints.START_NOW_PLAYING_UPDATES) {
             group(0) {
                 listOf(1, 4, 6, 12, 26).forEach(::void)
@@ -283,11 +283,15 @@ object Iap2ControlMessages {
             group(1) {
                 listOf(0, 1, 7).forEach(::void)
             }
-        },
+        }
+
+    fun subscriptions(): List<Iap2Frame> = listOf(
+        startNowPlayingUpdates(),
         Iap2Messages.build(Iap2Endpoints.START_ROUTE_GUIDANCE_UPDATES) {
             u16(0, 42)
             void(1)
             void(2)
+            void(3)
         },
         Iap2Messages.build(Iap2Endpoints.START_POWER_UPDATES) {
             void(4)
